@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaMasters - Packs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-pack.css') }}">
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <main class="main-content">
+        <header>
+            <h1 class="page-title">Ouvrir un paquet</h1>
+        </header>
+
+        {% if message %}
+            <div class="alert-box">
+                <p class="error-message">{{ message }}</p>
+            </div>
+        {% endif %}
+        
+        <section class="booster-section">
+            <div class="booster-container">
+                <img src="{{ url_for('static', filename='img/test.png') }}" alt="Paquet de cartes" class="booster-pack-style">
+            </div>
+            
+            <form action="{{ url_for('pull') }}" method="POST">
+                <button type="submit" class="btn-primary btn-open" {% if packs == 0 %}disabled{% endif %}>
+                    {{ "Ouvrir le paquet" if packs > 0 else "Packs épuisés" }}
+                </button>
+            </form>
+        </section>
+        
+        <footer class="pack-counter">
+            <p>Packs disponibles : <span id="packs-count">{{ packs }}</span> / 2</p>
+            <div id="timer" class="timer-text" data-end="{{ next_refresh }}">Chargement du temps...</div>
+        </footer>
+    </main>
+
+    <script>
+        const timerEl = document.getElementById('timer');
+        const endTime = parseFloat(timerEl.dataset.end) * 1000;
+
+        function updateTimer() {
+            const distance = endTime - new Date().getTime();
+            if (distance <= 0) {
+                location.reload();
+            } else {
+                let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let s = Math.floor((distance % (1000 * 60)) / 1000);
+                timerEl.innerText = `Rafraîchissement dans ${m}m ${s}s`;
+            }
+        }
+
+        if (endTime > 0) {
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        } else {
+            timerEl.innerText = "Prêt à ouvrir !";
+        }
+    </script>
+</body>
+</html>

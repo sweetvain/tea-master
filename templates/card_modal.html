@@ -1,0 +1,188 @@
+ <!-- CARD MODAL -->
+
+<div class="card-modal-overlay" id="card-modal-overlay" onclick="closeCardModal(event)">
+
+<button class="card-modal-close" onclick="closeCardModal(null)">✕</button>
+
+<div class="card-modal" id="card-modal">
+
+<div id="modal-card-el"></div>
+
+<div class="card-modal-info" id="modal-card-info"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+// --- CARD MODAL SCRIPT (MODULAIRE) ---
+
+
+// Helper pour échapper les caractères HTML et éviter les problèmes d'affichage
+
+function escapeHtml(str) {
+
+if (typeof str !== 'string') return '';
+
+return str
+
+.replace(/&/g, '&amp;')
+
+.replace(/</g, '&lt;')
+
+.replace(/>/g, '&gt;')
+
+.replace(/"/g, '&quot;');
+
+}
+
+
+// Fonction pour créer l'élément visuel d'une carte (utilisé dans la modale)
+
+function makeModalCardEl(c) {
+
+const div = document.createElement('div');
+
+div.className = 'card ' + (c.rarity || 'rare').toLowerCase();
+
+div.style.pointerEvents = 'none'; // Empêche de cliquer sur la carte dans la modale
+
+
+const labels = { legendaire: 'Légendaire', epique: 'Épique', rare: 'Rare', mythique: 'Mythique', goat: 'GOAT', hess: 'Hess' };
+
+const stars = { legendaire: '★', mythique: '★', goat: '★' };
+
+const badgeText = labels[c.rarity.toLowerCase()] || 'Rare';
+
+const starHtml = stars[c.rarity.toLowerCase()] ? `<div class="card-star">${stars[c.rarity.toLowerCase()]}</div>` : '';
+
+
+const photoContent = c.photo
+
+? `<img src="{{ url_for('static', filename='uploads/') }}${c.photo}" alt="${escapeHtml(c.name)}" />`
+
+: `<div class="card-photo-initials">${escapeHtml(c.initials || (c.name || '?').slice(0, 2).toUpperCase())}</div>`;
+
+
+const mythBorder = c.rarity.toLowerCase() === 'mythique' ? '<div class="mythique-border"></div>' : '';
+
+const goatBorder = c.rarity.toLowerCase() === 'goat' ? '<div class="goat-border"></div>' : '';
+
+
+div.innerHTML = `
+
+${mythBorder}
+
+${goatBorder}
+
+<div class="card-photo">
+
+${photoContent}
+
+<div class="card-photo-fade"></div>
+
+</div>
+
+<div class="card-top">
+
+<div class="rarity-badge">${badgeText}</div>
+
+${starHtml}
+
+</div>
+
+<div class="card-body">
+
+<div class="card-name">${escapeHtml(c.name || '?')}</div>
+
+<div class="card-role">${escapeHtml(c.role || 'Sans rôle')}</div>
+
+<div class="card-desc">${escapeHtml(c.description || '')}</div>
+
+</div>
+
+`;
+
+return div;
+
+}
+
+
+// Ouvre la modale avec les données de la carte
+
+function openCardModal(card) {
+
+const labels = { legendaire: 'Légendaire', epique: 'Épique', rare: 'Rare', mythique: 'Mythique', goat: 'GOAT', hess: 'Hess' };
+
+
+// Affiche la carte en grand dans la modale
+
+const cardEl = makeModalCardEl(card);
+
+const wrap = document.getElementById('modal-card-el');
+
+wrap.innerHTML = '';
+
+wrap.appendChild(cardEl);
+
+
+// Affiche les informations textuelles
+
+const info = document.getElementById('modal-card-info');
+
+info.innerHTML = `
+
+<div class="card-modal-rarity ${card.rarity.toLowerCase()}">${labels[card.rarity.toLowerCase()] || 'Rare'}</div>
+
+<div class="card-modal-name">${escapeHtml(card.name || '?')}</div>
+
+<div class="card-modal-role">${escapeHtml(card.role || 'Sans rôle')}</div>
+
+<div class="card-modal-divider"></div>
+
+<div class="card-modal-desc">${escapeHtml(card.description || 'Aucune description.')}</div>
+
+`;
+
+
+document.getElementById('card-modal-overlay').classList.add('open');
+
+document.body.style.overflow = 'hidden'; // Empêche le défilement de la page derrière
+
+}
+
+
+// Ferme la modale
+
+function closeCardModal(event) {
+
+// Ne ferme que si on clique sur le fond (l'overlay) ou le bouton de fermeture
+
+if (event && event.target.id !== 'card-modal-overlay' && !event.target.closest('.card-modal-close')) {
+
+return;
+
+}
+
+document.getElementById('card-modal-overlay').classList.remove('open');
+
+document.body.style.overflow = '';
+
+}
+
+
+// Raccourci clavier pour fermer la modale avec la touche "Echap"
+
+document.addEventListener('keydown', (event) => {
+
+if (event.key === 'Escape') {
+
+closeCardModal(null);
+
+}
+
+});
+
+</script> 

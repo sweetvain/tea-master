@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Card // Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { background: #080810; color: #fff; font-family: 'Share Tech Mono', monospace; padding-top: 80px; }
+        .admin-container { max-width: 600px; margin: 0 auto; padding: 30px; background: rgba(12, 11, 20, 0.9); border: 1px solid rgba(176, 107, 255, 0.3); border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        h1 { color: var(--neon-blue, #00f0ff); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; text-align: center; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; color: #888; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; }
+        
+        input, select, textarea {
+            width: 100%;
+            background: #141320;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+        
+        input:focus, textarea:focus { outline: none; border-color: var(--neon-purple, #b06bff); box-shadow: 0 0 10px rgba(176, 107, 255, 0.2); }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            border: 1px solid var(--neon-blue, #00f0ff);
+            color: var(--neon-blue, #00f0ff);
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn-submit:hover { background: var(--neon-blue, #00f0ff); color: #000; }
+        
+        .current-img { margin-bottom: 10px; width: 100px; height: 100px; object-fit: cover; border: 1px solid #444; }
+    </style>
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <div class="admin-container">
+        <h1>// EDITER: {{ card.name }}</h1>
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Nom de la carte</label>
+                <input type="text" name="name" value="{{ card.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Rareté</label>
+                <select name="rarity">
+                    <option value="Hess" {% if card.rarity == 'Hess' %}selected{% endif %}>Hess</option>
+                    <option value="Rare" {% if card.rarity == 'Rare' %}selected{% endif %}>Rare</option>
+                    <option value="Epique" {% if card.rarity == 'Epique' %}selected{% endif %}>Épique</option>
+                    <option value="Legendaire" {% if card.rarity == 'Legendaire' %}selected{% endif %}>Légendaire</option>
+                    <option value="Mythique" {% if card.rarity == 'Mythique' %}selected{% endif %}>Mythique</option>
+                    <option value="GOAT" {% if card.rarity == 'GOAT' %}selected{% endif %}>GOAT</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" rows="3">{{ card.description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Image actuelle</label>
+                {% if card.photo %}
+                    <img src="{{ url_for('static', filename='uploads/' + card.photo) }}" class="current-img">
+                {% else %}
+                    <p style="font-size: 0.8rem; color: #555;">Aucune image</p>
+                {% endif %}
+                <input type="file" name="photo">
+            </div>
+
+            <button type="submit" class="btn-submit">SAUVEGARDER LES MODIFICATIONS</button>
+        </form>
+    </div>
+
+</body>
+</html>

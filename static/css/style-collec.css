@@ -1,0 +1,649 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500&family=Syne:wght@400;500;700;800&display=swap');
+
+:root {
+  --bg: #080810;
+  --surface: #111118;
+  --surface2: #1a1a24;
+  --surface3: #22222e;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f0f0f4;
+  --muted: #7a7a90;
+  --rare: #4a9eff;
+  --epique: #b06bff;
+  --legendaire: #ffb830;
+  --mythique: #ff2d55;
+  --goat: #39ff6a;
+  --hess: #8a8a9a;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(74,158,255,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 0%, rgba(176,107,255,0.04) 0%, transparent 60%);  
+  display: flex;
+}
+
+h1, h2, h3 { font-family: 'Syne', sans-serif; }
+
+/* SIDEBAR (copié depuis les autres fichiers pour uniformiser) */
+.sidebar {
+  width: 240px;
+  background-color: #0d0b18;
+  border-right: 1px solid #1f1b2e;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+}
+.sidebar h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  background: linear-gradient(90deg, #ffffff 30%, #a78bfa 70%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 40px;
+  padding-left: 10px;
+}
+.nav-links { display: flex; flex-direction: column; gap: 8px; }
+.nav-link { color: #94a3b8; text-decoration: none; padding: 14px 18px; border-radius: 10px; font-weight: 500; font-size: 0.95rem; transition: all 0.2s ease; }
+.nav-link:hover { color: white; background: rgba(255, 255, 255, 0.03); }
+.nav-link.active { color: white; background: #1f1b2e; border: 1px solid #2d2645; }
+.nav-footer { margin-top: auto; }
+.nav-username { color: var(--muted); font-size: 13px; display: block; text-align: center; margin-bottom: 10px; }
+.logout-btn { color: #ef4444; text-align: center; display: block; }
+.logout-btn:hover { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+
+/* MAIN */
+.main-content {
+    flex-grow: 1;
+    padding: 40px;
+    overflow-y: auto;
+    margin-top: 51px !important;
+}
+
+/* COLLECTION */
+.page-title { margin-top: 51px !important; font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 1.25rem; }
+.coll-stats { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.stat-chip { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 10px 16px; font-size: 13px; flex: 1; min-width: 76px; text-align: center; cursor: pointer; }
+.stat-chip .n { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; display: block; line-height: 1.1; margin-bottom: 2px; }
+.stat-chip .lbl { color: var(--muted); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+.stat-chip .n.badge-rare { color: var(--rare); }
+.stat-chip .n.badge-epique { color: var(--epique); }
+.stat-chip .n.badge-legendaire { color: var(--legendaire); }
+.stat-chip .n.badge-mythique { color: var(--mythique); }
+.stat-chip .n.badge-goat { color: var(--goat); text-shadow: 0 0 8px rgba(57,255,106,0.6); }
+.stat-chip .n.badge-hess { color: var(--hess); }
+
+.coll-filter-wrap { margin-bottom: 1.25rem; }
+.coll-search {
+  width: 100%; padding: 10px 16px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-size: 14px; font-family: 'Inter', sans-serif;
+  margin-bottom: 10px; transition: border-color 0.2s;
+  outline: none;
+}
+.coll-search:focus { border-color: rgba(255,255,255,0.25); }
+.coll-search::placeholder { color: var(--muted); }
+.coll-search-wrap { position: relative; }
+.coll-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 15px; pointer-events: none; }
+.coll-filter { background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 4px; display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.filter-btn { font-size: 12px; padding: 5px 14px; border-radius: 999px; background: transparent; border: 1px solid transparent; color: var(--muted); font-weight: 500; transition: all 0.15s; cursor: pointer; }
+.filter-btn:hover { background: var(--surface2); color: var(--text); }
+.filter-btn.active { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+.filter-btn.active-mythique { background: rgba(255,45,85,0.12); color: var(--mythique); border-color: rgba(255,45,85,0.35); }
+.filter-btn.active-goat { background: rgba(57,255,106,0.14); color: var(--goat); border-color: rgba(57,255,106,0.5); box-shadow: 0 0 10px rgba(57,255,106,0.35); }
+.filter-btn.active-hess { background: rgba(138,138,154,0.1); color: var(--hess); border-color: rgba(138,138,154,0.35); }
+
+.coll-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.coll-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 4rem 0; grid-column: 1/-1; line-height: 2; width: 100%; }
+
+/* CARD */
+.card {
+  border-radius: 18px;
+  border: 2px solid rgba(255,255,255,0.18);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  width: 266px;
+  height: 355px;
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+  cursor: pointer;
+  background: #111;
+}
+.card:hover { transform: translateY(-8px) scale(1.03); }
+
+/* Couleurs de bordure & ombre par rareté */
+.card.rare    { border-color: rgba(74,158,255,0.55);  box-shadow: 0 6px 24px rgba(74,158,255,0.2); }
+.card.epique  { border-color: rgba(176,107,255,0.55); box-shadow: 0 6px 24px rgba(176,107,255,0.2); }
+.card.legendaire { border-color: rgba(255,184,48,0.65); box-shadow: 0 6px 28px rgba(255,184,48,0.25); }
+.card.mythique   { border-color: transparent; box-shadow: 0 6px 28px rgba(255,45,85,0.3); }
+.card.goat       { border-color: transparent; box-shadow: 0 6px 32px rgba(57,255,106,0.4); }
+.card.hess       { border-color: rgba(138,138,154,0.35); box-shadow: 0 4px 16px rgba(138,138,154,0.12); }
+
+.card.rare:hover    { box-shadow: 0 14px 48px rgba(74,158,255,0.4); }
+.card.epique:hover  { box-shadow: 0 14px 48px rgba(176,107,255,0.45); }
+.card.legendaire:hover { box-shadow: 0 14px 52px rgba(255,184,48,0.5); }
+.card.mythique:hover   { box-shadow: 0 14px 56px rgba(255,45,85,0.6); transform: translateY(-10px) scale(1.04); }
+.card.goat:hover       { box-shadow: 0 0 40px rgba(57,255,106,0.85), 0 14px 60px rgba(57,255,106,0.5); transform: translateY(-10px) scale(1.04); }
+.card.hess:hover       { box-shadow: 0 8px 28px rgba(138,138,154,0.25); }
+
+/* Bordure animée mythique */
+.mythique-border {
+  position: absolute; inset: 0; border-radius: 18px; padding: 2px;
+  background: linear-gradient(135deg, #ff2d55 0%, #ff6b35 25%, #ffb830 50%, #ff6b35 75%, #ff2d55 100%);
+  background-size: 300% 300%;
+  animation: mythBorderAnim 3s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out; mask-composite: exclude;
+  z-index: 1; pointer-events: none;
+}
+@keyframes mythBorderAnim { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+/* Bordure animée GOAT */
+.goat-border {
+  position: absolute; inset: 0; border-radius: 18px; padding: 2.5px;
+  background: linear-gradient(135deg, #39ff6a 0%, #b6ffce 25%, #00ff88 50%, #b6ffce 75%, #39ff6a 100%);
+  background-size: 300% 300%;
+  animation: mythBorderAnim 2.2s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out; mask-composite: exclude;
+  z-index: 1; pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(57,255,106,0.9)) drop-shadow(0 0 14px rgba(57,255,106,0.6));
+}
+.card.goat {
+  animation: goatGlow 1.6s ease-in-out infinite;
+}
+@keyframes goatGlow {
+  0%, 100% { box-shadow: 0 0 18px rgba(57,255,106,0.55), 0 6px 28px rgba(57,255,106,0.3); }
+  50%      { box-shadow: 0 0 38px rgba(57,255,106,0.95), 0 6px 40px rgba(57,255,106,0.6); }
+}
+.card.mythique {
+  animation: mythiqueGlow 1.8s ease-in-out infinite;
+}
+@keyframes mythiqueGlow {
+  0%, 100% { box-shadow: 0 0 16px rgba(255,45,85,0.5), 0 6px 26px rgba(255,45,85,0.25); }
+  50%      { box-shadow: 0 0 36px rgba(255,45,85,0.9), 0 6px 38px rgba(255,45,85,0.55); }
+}
+/* Zone photo (haut de carte) */
+.card-photo {
+  width: 100%;
+  height: 140px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background: #1a1a2e;
+}
+.card-photo img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.card-photo-initials {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800;
+  color: rgba(255,255,255,0.9);
+}
+.card-photo-fade {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 50px; pointer-events: none;
+}
+.card.rare      .card-photo-fade { background: linear-gradient(to bottom, transparent, #0d2855); }
+.card.epique    .card-photo-fade { background: linear-gradient(to bottom, transparent, #1a0845); }
+.card.legendaire .card-photo-fade { background: linear-gradient(to bottom, transparent, #2a1500); }
+.card.mythique  .card-photo-fade { background: linear-gradient(to bottom, transparent, #2a0515); }
+.card.goat      .card-photo-fade { background: linear-gradient(to bottom, transparent, #04230f); }
+.card.hess      .card-photo-fade { background: linear-gradient(to bottom, transparent, #141420); }
+
+/* fond coloré de la zone photo selon rareté */
+.card.rare      .card-photo { background: linear-gradient(160deg, #0d2855, #071a45); }
+.card.epique    .card-photo { background: linear-gradient(160deg, #200850, #0a0220); }
+.card.legendaire .card-photo { background: linear-gradient(160deg, #3a1e00, #1a0c00); }
+.card.mythique  .card-photo { background: linear-gradient(160deg, #2a0515, #0d0108); }
+.card.goat      .card-photo { background: linear-gradient(160deg, #08431f, #021a0c); }
+.card.hess      .card-photo { background: linear-gradient(160deg, #1e1e2a, #141420); }
+
+/* Badge rareté + étoile en overlay sur la photo */
+.card-top {
+  position: absolute; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 10px; z-index: 5;
+}
+.rarity-badge {
+  font-size: 10px; font-weight: 400; font-family: 'Anton', sans-serif;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px; border: 1px solid transparent;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.card.rare      .rarity-badge { background: rgba(10,30,80,0.75);  color: #aadeff; border-color: rgba(74,158,255,0.5); }
+.card.epique    .rarity-badge { background: rgba(20,5,50,0.75);   color: #e0b8ff; border-color: rgba(176,107,255,0.5); }
+.card.legendaire .rarity-badge { background: rgba(40,20,0,0.75); color: #ffe090; border-color: rgba(255,184,48,0.6); }
+.card.mythique  .rarity-badge { background: rgba(40,0,15,0.75);  color: #ffb0c0; border-color: rgba(255,45,85,0.6); }
+.card.goat      .rarity-badge { background: rgba(2,30,15,0.75); color: #9bffba; border-color: rgba(57,255,106,0.7); box-shadow: 0 0 10px rgba(57,255,106,0.6); }
+.card.hess      .rarity-badge { background: rgba(20,20,32,0.8); color: #b0b0c4; border-color: rgba(138,138,154,0.4); }
+
+.card-star {
+  font-size: 16px; line-height: 1; color: rgba(255,255,255,0.8);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+.card.legendaire .card-star { color: #ffd070; font-size: 18px; }
+.card.mythique   .card-star { color: #ff4466; font-size: 18px; text-shadow: 0 0 10px rgba(255,45,85,0.9); animation: starPulse 2s ease-in-out infinite; }
+@keyframes starPulse { 0%,100%{text-shadow:0 0 10px rgba(255,45,85,0.8),0 0 20px rgba(255,45,85,0.4)} 50%{text-shadow:0 0 18px rgba(255,45,85,1),0 0 36px rgba(255,45,85,0.7)} }
+.card.goat       .card-star { color: #39ff6a; font-size: 19px; text-shadow: 0 0 10px rgba(57,255,106,0.9); animation: starPulseGoat 1.4s ease-in-out infinite; }
+@keyframes starPulseGoat { 0%,100%{text-shadow:0 0 10px rgba(57,255,106,0.8),0 0 20px rgba(57,255,106,0.5)} 50%{text-shadow:0 0 20px rgba(57,255,106,1),0 0 40px rgba(57,255,106,0.8)} }
+
+/* Zone bas : fond coloré avec nom + desc */
+.card-body {
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  padding: 10px 10px 9px;
+  position: relative; z-index: 5;
+}
+.card.rare      .card-body { background: linear-gradient(170deg, #0d2855 0%, #071a45 100%); }
+.card.epique    .card-body { background: linear-gradient(170deg, #200850 0%, #0a0220 100%); }
+.card.legendaire .card-body { background: linear-gradient(170deg, #2a1500 0%, #110800 100%); }
+.card.mythique  .card-body { background: linear-gradient(170deg, #2a0515 0%, #0d0108 100%); }
+.card.goat      .card-body { background: linear-gradient(170deg, #08431f 0%, #021a0c 100%); }
+.card.hess      .card-body { background: linear-gradient(170deg, #1e1e2a 0%, #141420 100%); }
+
+/* reflet lumineux en haut du body */
+.card-body::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40px;
+  pointer-events: none; z-index: 0;
+}
+.card.rare      .card-body::before { background: linear-gradient(to bottom, rgba(74,158,255,0.18), transparent); }
+.card.epique    .card-body::before { background: linear-gradient(to bottom, rgba(176,107,255,0.2), transparent); }
+.card.legendaire .card-body::before { background: linear-gradient(to bottom, rgba(255,184,48,0.25), transparent); }
+.card.mythique  .card-body::before { background: linear-gradient(to bottom, rgba(255,45,85,0.22), transparent); }
+.card.goat      .card-body::before { background: linear-gradient(to bottom, rgba(57,255,106,0.3), transparent); }
+.card.hess      .card-body::before { background: linear-gradient(to bottom, rgba(138,138,154,0.1), transparent); }
+
+.card-name {
+  font-family: 'Anton', sans-serif; font-size: 16px; font-weight: 400;
+  color: #fff; line-height: 1.15; margin-bottom: 4px; position: relative; z-index: 1;
+  letter-spacing: 0.3px;
+}
+.card.mythique .card-name { text-shadow: 0 0 10px rgba(255,45,85,0.5); }
+.card.goat .card-name { text-shadow: 0 0 12px rgba(57,255,106,0.8); }
+
+.card-role {
+  font-size: 10.5px; color: rgba(255,255,255,0.6); font-style: italic;
+  margin-bottom: 5px; position: relative; z-index: 1;
+}
+.card-desc {
+  font-size: 10px; color: rgba(255,255,255,0.5); line-height: 1.45;
+  position: relative; z-index: 1;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* CARD COUNT BADGE */
+.card-count-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 999px; font-size: 10px; font-weight: 700; color: #fff;
+  padding: 1px 7px; z-index: 10; backdrop-filter: blur(4px);
+}
+
+/* CARD MODAL */
+.card-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.card-modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.card-modal {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  max-width: 780px;
+  width: 100%;
+  transform: translateY(24px) scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.card-modal-overlay.open .card-modal {
+  transform: translateY(0) scale(1);
+}
+.card-modal .card {
+  width: 320px;
+  height: 475px;
+  flex-shrink: 0;
+  cursor: default;
+}
+.card-modal .card:hover { transform: none; }
+.card-modal .card-photo { height: 235px; }
+.card-modal .card-photo-initials { font-size: 76px; }
+.card-modal .card .card-name { font-size: 18px; }
+.card-modal .card .card-role { font-size: 13px; margin-bottom: 8px; }
+.card-modal .card .card-desc {
+  font-size: 13px; line-height: 1.55;
+  -webkit-line-clamp: 4;
+}
+.card-modal .card .rarity-badge { font-size: 11px; padding: 4px 11px; }
+.card-modal .card .card-star { font-size: 22px; }
+.card-modal .card .card-body { padding: 14px 14px 12px; }
+.card-modal-info {
+  flex: 1;
+  min-width: 0;
+}
+.card-modal-rarity {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  margin-bottom: 14px;
+}
+.card-modal-rarity.rare { background: rgba(74,158,255,0.15); color: #aadeff; border-color: rgba(74,158,255,0.4); }
+.card-modal-rarity.epique { background: rgba(176,107,255,0.15); color: #e0b8ff; border-color: rgba(176,107,255,0.4); }
+.card-modal-rarity.legendaire { background: rgba(255,184,48,0.15); color: #ffe090; border-color: rgba(255,184,48,0.5); }
+.card-modal-rarity.mythique { background: linear-gradient(135deg, rgba(255,45,85,0.2), rgba(255,107,53,0.2)); color: #ffb0c0; border-color: rgba(255,45,85,0.5); }
+.card-modal-rarity.goat { background: linear-gradient(135deg, rgba(57,255,106,0.25), rgba(0,255,150,0.18)); color: #b6ffce; border-color: rgba(57,255,106,0.6); box-shadow: 0 0 12px rgba(57,255,106,0.4); }
+.card-modal-rarity.hess { background: rgba(138,138,154,0.1); color: #b0b0c4; border-color: rgba(138,138,154,0.35); }
+.card-modal-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.card-modal-role {
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.card-modal-divider {
+  height: 1px;
+  background: var(--border2);
+  margin-bottom: 16px;
+}
+.card-modal-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.7;
+}
+.card-modal-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  z-index: 501;
+  line-height: 1;
+  padding: 0;
+}
+.card-modal-close:hover { background: var(--surface3); color: var(--text); border-color: rgba(255,255,255,0.25); }
+@media (max-width: 600px) {
+  .card-modal { flex-direction: column; align-items: center; gap: 1.5rem; overflow-y: auto; max-height: 90vh; }
+  .card-modal .card { width: 265px; height: 393px; }
+  .card-modal .card-photo { height: 194px; }
+  .card-modal .card-photo-initials { font-size: 60px; }
+  .card-modal-name { font-size: 22px; }
+}
+.card-modal-delete-zone { margin-top: 20px; }
+.btn-delete-card {
+  background: rgba(255,45,85,0.08);
+  border: 1px solid rgba(255,45,85,0.25);
+  color: #ff6b85;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px 16px;
+  width: 100%;
+  transition: all 0.15s;
+}
+.btn-delete-card:hover { background: rgba(255,45,85,0.16); border-color: rgba(255,45,85,0.5); }
+
+.card-modal-confirm {
+  display: none;
+  background: rgba(255,45,85,0.06);
+  border: 1px solid rgba(255,45,85,0.2);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+.card-modal-confirm.visible { display: block; }
+.card-modal-confirm p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.card-modal-confirm p strong { color: #fff; }
+.confirm-btns { display: flex; gap: 8px; }
+.btn-confirm-yes {
+  flex: 1; background: rgba(255,45,85,0.2); border: 1px solid rgba(255,45,85,0.5);
+  color: #ff6b85; border-radius: var(--radius-xs); font-size: 13px; font-weight: 600; padding: 9px;
+}
+.btn-confirm-yes:hover { background: rgba(255,45,85,0.35); }
+.btn-confirm-no {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border2);
+  color: var(--muted); border-radius: var(--radius-xs); font-size: 13px; font-weight: 500; padding: 9px;
+}
+.btn-confirm-no:hover { background: var(--surface3); color: var(--text); }
+
+/* CARD COUNT BADGE */
+.card-count-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 999px; font-size: 10px; font-weight: 700; color: #fff;
+  padding: 1px 7px; z-index: 10; backdrop-filter: blur(4px);
+}
+
+/* CARD MODAL */
+.card-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.card-modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.card-modal {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  max-width: 780px;
+  width: 100%;
+  transform: translateY(24px) scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.card-modal-overlay.open .card-modal {
+  transform: translateY(0) scale(1);
+}
+.card-modal .card {
+  width: 320px;
+  height: 475px;
+  flex-shrink: 0;
+  cursor: default;
+}
+.card-modal .card:hover { transform: none; }
+.card-modal .card-photo { height: 235px; }
+.card-modal .card-photo-initials { font-size: 76px; }
+.card-modal .card .card-name { font-size: 18px; }
+.card-modal .card .card-role { font-size: 13px; margin-bottom: 8px; }
+.card-modal .card .card-desc {
+  font-size: 13px; line-height: 1.55;
+  -webkit-line-clamp: 4;
+}
+.card-modal .card .rarity-badge { font-size: 11px; padding: 4px 11px; }
+.card-modal .card .card-star { font-size: 22px; }
+.card-modal .card .card-body { padding: 14px 14px 12px; }
+.card-modal-info {
+  flex: 1;
+  min-width: 0;
+}
+.card-modal-rarity {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  margin-bottom: 14px;
+}
+.card-modal-rarity.rare { background: rgba(74,158,255,0.15); color: #aadeff; border-color: rgba(74,158,255,0.4); }
+.card-modal-rarity.epique { background: rgba(176,107,255,0.15); color: #e0b8ff; border-color: rgba(176,107,255,0.4); }
+.card-modal-rarity.legendaire { background: rgba(255,184,48,0.15); color: #ffe090; border-color: rgba(255,184,48,0.5); }
+.card-modal-rarity.mythique { background: linear-gradient(135deg, rgba(255,45,85,0.2), rgba(255,107,53,0.2)); color: #ffb0c0; border-color: rgba(255,45,85,0.5); }
+.card-modal-rarity.goat { background: linear-gradient(135deg, rgba(57,255,106,0.25), rgba(0,255,150,0.18)); color: #b6ffce; border-color: rgba(57,255,106,0.6); box-shadow: 0 0 12px rgba(57,255,106,0.4); }
+.card-modal-rarity.hess { background: rgba(138,138,154,0.1); color: #b0b0c4; border-color: rgba(138,138,154,0.35); }
+.card-modal-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.card-modal-role {
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.card-modal-divider {
+  height: 1px;
+  background: var(--border2);
+  margin-bottom: 16px;
+}
+.card-modal-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.7;
+}
+.card-modal-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  z-index: 501;
+  line-height: 1;
+  padding: 0;
+}
+.card-modal-close:hover { background: var(--surface3); color: var(--text); border-color: rgba(255,255,255,0.25); }
+@media (max-width: 600px) {
+  .card-modal { flex-direction: column; align-items: center; gap: 1.5rem; overflow-y: auto; max-height: 90vh; }
+  .card-modal .card { width: 265px; height: 393px; }
+  .card-modal .card-photo { height: 194px; }
+  .card-modal .card-photo-initials { font-size: 60px; }
+  .card-modal-name { font-size: 22px; }
+}
+.card-modal-delete-zone { margin-top: 20px; }
+.btn-delete-card {
+  background: rgba(255,45,85,0.08);
+  border: 1px solid rgba(255,45,85,0.25);
+  color: #ff6b85;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px 16px;
+  width: 100%;
+  transition: all 0.15s;
+}
+.btn-delete-card:hover { background: rgba(255,45,85,0.16); border-color: rgba(255,45,85,0.5); }
+
+.card-modal-confirm {
+  display: none;
+  background: rgba(255,45,85,0.06);
+  border: 1px solid rgba(255,45,85,0.2);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+.card-modal-confirm.visible { display: block; }
+.card-modal-confirm p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.card-modal-confirm p strong { color: #fff; }
+.confirm-btns { display: flex; gap: 8px; }
+.btn-confirm-yes {
+  flex: 1; background: rgba(255,45,85,0.2); border: 1px solid rgba(255,45,85,0.5);
+  color: #ff6b85; border-radius: var(--radius-xs); font-size: 13px; font-weight: 600; padding: 9px;
+}
+.btn-confirm-yes:hover { background: rgba(255,45,85,0.35); }
+.btn-confirm-no {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border2);
+  color: var(--muted); border-radius: var(--radius-xs); font-size: 13px; font-weight: 500; padding: 9px;
+}
+.btn-confirm-no:hover { background: var(--surface3); color: var(--text); }

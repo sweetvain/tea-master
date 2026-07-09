@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ouverture de Module // TeaMasters</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-collec.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <main class="pull-container">
+        <h1 class="page-cyber-title">SYSTEM // UNBOXING_SEQUENCE</h1>
+        <p class="page-cyber-subtitle">Déchiffrement des paquets de données en cours... Cliquez sur une carte pour la révéler.</p>
+        
+        {% if message %}
+            <p class="error-message">{{ message }}</p>
+        {% else %}
+            <div class="cards-grid">
+                {% for card in drawn_cards %}
+                    <!-- Utilisation de data-card pour éviter les erreurs de syntaxe JS -->
+                    <div class="card-flip-container" 
+                         onclick="revealCard(this)" 
+                         data-card='{{ card | tojson | safe }}'>
+                        
+                        <div class="card-inner">
+                            <!-- FACE CACHÉE : Design Booster -->
+                            <div class="card-front-cover">
+                                <div class="matrix-bg-effect"></div>
+                                <div class="cover-logo">TM</div>
+                                <div class="cover-status">LOCKED // CLICK TO DECRYPT</div>
+                            </div>
+                            
+                            <!-- FACE REVELÉE : La carte -->
+                            <div class="game-card rarity-{{ card.rarity|lower }}">
+                                <div class="card-image-area">
+                                    {% if card.photo %}
+                                        <img src="{{ url_for('static', filename='uploads/' + card.photo) }}" alt="{{ card.name }}">
+                                    {% else %}
+                                        <div class="card-initials-placeholder">{{ card.initials or card.name[:2] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="card-badge">{{ card.rarity }}</div>
+                                {% if card.rarity|lower in ['legendaire', 'mythique', 'goat'] %}
+                                    <div class="card-stars">★</div>
+                                {% endif %}
+                                <div class="card-details">
+                                    <div class="card-name">{{ card.name }}</div>
+                                    <div class="card-role">{{ card.role or 'Sans rôle' }}</div>
+                                    <div class="card-desc">{{ card.description or '' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="actions-container" id="actions-panel" style="opacity: 0; pointer-events: none;">
+            <a href="/" class="btn-cyber-action btn-back">DÉCRYPTER UN AUTRE BOOSTER</a>
+            <a href="/collection" class="btn-cyber-action btn-collec">ACCÉDER AUX ARCHIVES</a>
+        </div>
+    </main>
+
+    {% include 'card_modal.html' %}
+    
+    <script>
+        const totalCards = parseInt("{{ drawn_cards|length if drawn_cards else 0 }}");
+        let revealedCount = 0;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.from(".card-flip-container", {
+                y: 100, opacity: 0, scale: 0.8, duration: 0.8, stagger: 0.15, ease: "back.out(1.4)",
+                onComplete: () => {
+                    gsap.to(".card-inner", { y: -5, repeat: -1, yoyo: true, duration: 1.2, stagger: 0.1, ease: "sine.inOut" });
+                }
+            });
+        });
+
+        function revealCard(element) {
+            // Lecture sécurisée des données
+            const cardData = JSON.parse(element.getAttribute('data-card'));
+            
+            if (element.classList.contains('is-revealed')) {
+                if(typeof openCardModal === "function") openCardModal(cardData);
+                return;
+            }
+            
+            element.classList.add('is-revealed');
+            revealedCount++;
+            gsap.killTweensOf(element.querySelector('.card-inner'));
+
+            const timeline = gsap.timeline();
+            timeline.to(element.querySelector('.card-inner'), { x: -6, duration: 0.05, repeat: 4, yoyo: true })
+                    .to(element.querySelector('.card-inner'), { scale: 1.1, zIndex: 100, duration: 0.2, ease: "power2.out" })
+                    .to(element.querySelector('.card-inner'), { rotateY: 180, duration: 0.5, ease: "back.out(1.1)" })
+                    .to(element.querySelector('.card-inner'), { scale: 1, duration: 0.3, ease: "power3.out" });
+
+            if (revealedCount === totalCards) {
+                const actionsPanel = document.getElementById('actions-panel');
+                actionsPanel.style.pointerEvents = "auto";
+                gsap.to(actionsPanel, { opacity: 1, y: 0, duration: 0.6, delay: 0.5, ease: "power2.out" });
+            }
+        }
+    </script>
+</body>
+</html>

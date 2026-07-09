@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>TeaMasters // Admin Terminal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-pack.css') }}">
+    <style>
+        /* Surcharges spécifiques Admin */
+        :root { 
+            --neon-purple: #b06bff; 
+            --neon-blue: #00f0ff; 
+            --neon-red: #ff2d55; 
+            --bg-dark: #080810;
+        }
+
+        body { 
+            background: var(--bg-dark); 
+            color: #fff; 
+            font-family: 'Share Tech Mono', monospace; 
+            min-height: 100vh; 
+            overflow-y: auto; /* Fix pour le scroll */
+            padding-top: 100px;
+            padding-bottom: 50px;
+        }
+
+        .admin-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2 { 
+            font-family: 'Orbitron', sans-serif; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: var(--neon-blue);
+            margin-bottom: 20px;
+        }
+
+        .admin-section {
+            background: rgba(12, 11, 20, 0.8);
+            border: 1px solid rgba(176, 107, 255, 0.2);
+            padding: 25px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Table Style */
+        .cyber-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .cyber-table th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--neon-purple);
+            color: var(--neon-purple);
+            font-size: 0.9rem;
+        }
+
+        .cyber-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Boutons */
+        .btn-admin {
+            padding: 6px 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            cursor: pointer;
+            border: 1px solid var(--neon-blue);
+            background: transparent;
+            color: var(--neon-blue);
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-admin:hover {
+            background: var(--neon-blue);
+            color: #000;
+        }
+
+        .btn-del { border-color: var(--neon-red); color: var(--neon-red); }
+        .btn-del:hover { background: var(--neon-red); color: #fff; }
+
+        /* Formulaire */
+        .add-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .add-form input {
+            background: #141320;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <div class="admin-wrapper">
+        <h1>// DASHBOARD ADMINISTRATEUR</h1>
+
+        <section class="admin-section">
+            <h2>Gestion Utilisateurs</h2>
+            <table class="cyber-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Statut</th>
+                        <th>Commandes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>{{ u.username }}</td>
+                        <td>{{ "ADMIN" if u.is_admin else "USER" }}</td>
+                        <td>
+                            <form action="/admin/toggle-admin/{{ u.id }}" method="POST" style="display:inline;">
+                                <button class="btn-admin">TOGGLE ADMIN</button>
+                            </form>
+                            {% if u.username != 'admin' %}
+                            <form action="/admin/delete-user/{{ u.id }}" method="POST" style="display:inline;">
+                                <button class="btn-admin btn-del">BAN</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="admin-section">
+            <h2>Gestion Cartes</h2>
+            
+            <form action="/admin/add-card" method="POST" enctype="multipart/form-data" class="add-form">
+                <input type="text" name="name" placeholder="Nom de la carte" required>
+                <input type="text" name="rarity" placeholder="Rareté">
+                <input type="file" name="photo">
+                <button type="submit" class="btn-admin" style="border-color: var(--neon-green); color: var(--neon-green);">AJOUTER</button>
+            </form>
+
+            <table class="cyber-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Rareté</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in cards %}
+                    <tr>
+                        <td>{{ c.name }}</td>
+                        <td>{{ c.rarity }}</td>
+                        <td>
+                            <a href="/admin/edit-card/{{ c.id }}" class="btn-admin">MODIFIER</a>
+                            <form action="/admin/delete-card/{{ c.id }}" method="POST" style="display:inline;">
+                                <button class="btn-admin btn-del">DELETE</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+</body>
+</html>

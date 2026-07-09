@@ -1,0 +1,156 @@
+/* Reset global et box-sizing */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Corps de la page : Fond dégradé radial sombre centré */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at center, #161224 0%, #0b0914 100%);
+    color: white;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Conteneur principal */
+.login-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Titre TeaMasters avec l'effet dégradé linéaire de la capture */
+.login-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    background: linear-gradient(90deg, #ffffff 30%, #a78bfa 70%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+}
+
+/* Sous-titre textuel */
+.login-subtitle {
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 25px;
+}
+
+/* Petite note sous le sous-titre */
+.subtitle-hint {
+    color: #a78bfa;
+    font-size: 11px;
+    opacity: 0.85;
+}
+
+/* La boîte centrale (Formulaire) */
+.login-box {
+    background: #110f1c;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #1f1b2e;
+    display: flex;
+    flex-direction: column;
+    width: 360px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Espacement interne du formulaire */
+.login-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Alignement des groupes de champs (Label au-dessus de l'Input) */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 6px;
+}
+
+/* Labels stylisés discrets */
+.form-group label {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: none;
+}
+
+/* Champs de saisie sombres */
+.form-group input {
+    background: #1b182b;
+    border: 1px solid #2d2645;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+}
+
+/* Message d'erreur dynamique (Code secret incorrect) */
+.error-message {
+    color: #ef4444;
+    font-size: 0.75rem;
+    text-align: left;
+    margin-top: -4px;
+    font-weight: 500;
+}
+
+/* Bouton principal dégradé Violet/Bleu */
+.btn-primary {
+    background: linear-gradient(90deg, #7c3aed 0%, #3b82f6 100%);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.95;
+}
+
+/* Lien d'inscription en bas */
+.register-link {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.register-link p {
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.register-link a {
+    color: #a78bfa;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.register-link a:hover {
+    color: #c084fc;
+    text-decoration: underline;
+}

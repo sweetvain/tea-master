@@ -1,0 +1,262 @@
+/* ==========================================================================
+   RESET & STRUCTURE DE BASE (RAPPEL)
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at center, #161224 0%, #0b0914 100%);
+    color: white;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   BARRE LATÉRALE (SIDEBAR)
+   ========================================================================== */
+.sidebar {
+    width: 260px;
+    background-color: #0d0b18;
+    border-right: 1px solid #1f1b2e;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    background: linear-gradient(90deg, #ffffff 30%, #a78bfa 70%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 40px;
+    padding-left: 10px;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-link {
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.nav-link.active {
+    color: white;
+    background: #1f1b2e;
+    border: 1px solid #2d2645;
+}
+
+.logout-btn {
+    margin-top: auto;
+    color: #ef4444;
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+}
+
+/* ==========================================================================
+   CONTENU CENTRAL RE-STYLISÉ POUR LE FORMULAIRE DE CRÉATION
+   ========================================================================== */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Permet le défilement naturel si le formulaire est grand */
+    padding: 40px 20px;
+    overflow-y: auto;
+    margin-top: 51px !important; 
+}
+
+/* Conteneur global ajusté pour centrer le bloc */
+.create-container {
+    width: 100%;
+    max-width: 520px; /* Largeur optimale calquée sur votre capture */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Titre aligné à gauche au-dessus de la carte */
+.page-title-left {
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-align: left;
+    letter-spacing: -0.03em;
+    color: white;
+}
+
+/* Le grand formulaire en boîte centrale */
+.card-form {
+    background: #110f1c;
+    padding: 35px 30px;
+    border-radius: 16px;
+    border: 1px solid #1f1b2e;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    width: 100%;
+}
+
+/* Titre à l'intérieur du formulaire */
+.form-section-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/* Groupes de champs verticaux */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 8px;
+}
+
+/* Labels gris discrets */
+.form-group label {
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Inputs, Selects et Textareas uniformisés */
+.card-form input[type="text"],
+.card-form textarea,
+.card-form select {
+    background: #1b182b;
+    border: 1px solid #2d2645;
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card-form input:focus,
+.card-form textarea:focus,
+.card-form select:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15);
+}
+
+/* Placeholders légèrement plus sombres */
+.card-form ::placeholder {
+    color: #475569;
+    opacity: 1;
+}
+
+/* Zone de texte spécifique */
+.card-form textarea {
+    height: 90px;
+    resize: none; /* Désactive le redimensionnement manuel pour garder le design propre */
+}
+
+/* Gestion du menu déroulant (Select) */
+.card-form select {
+    appearance: none; /* Supprime le style natif */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+/* Alignement en ligne (côte à côte) */
+.form-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* Zone d'upload pointillée personnalisée */
+.photo-upload-box {
+    border: 1px dashed #332a4e;
+    background: #151222;
+    padding: 24px;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-upload-box:hover {
+    background: #1b172c;
+    border-color: #4c3e75;
+}
+
+.upload-zone-text {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Bouton principal de soumission étiré */
+.btn-submit-card {
+    background: linear-gradient(90deg, #7c3aed 0%, #3b82f6 100%);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.25);
+    margin-top: 5px;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-submit-card:hover {
+    opacity: 0.95;
+}
+
+.btn-submit-card:active {
+    transform: scale(0.99);
+}
+
+/* Note descriptive tout en bas */
+.form-footer-note {
+    color: #475569;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    text-align: left;
+    margin-top: -5px;
+}

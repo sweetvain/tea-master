@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ouverture de Pack - TeaMasters</title>
+    <!-- GSAP pour les animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-collec.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-pull.css') }}">
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <main class="main-content pull-container">
+        <h1 class="pull-title">Ouverture du Pack</h1>
+        
+        <!-- Scène 3D -->
+        <div class="card-scene">
+            <div id="flip-container" class="card-wrapper">
+                <!-- Verso -->
+                <div class="card-face card-back">
+                    <div class="card-back-content">TeaMasters</div>
+                </div>
+                <!-- Recto (Injecté par makeModalCardEl) -->
+                <div class="card-face card-front" id="modal-card-el-pull"></div>
+            </div>
+            
+            <!-- Bouton brillant bas-droite -->
+            <button id="action-btn" class="glowing-btn" onclick="handleAction()">Continuer</button>
+        </div>
+    </main>
+
+    {% include 'card_modal.html' %}
+
+    <script>
+        const cards = {{ drawn_cards | tojson | safe }};
+        let currentIndex = 0;
+        let hasFlipped = false;
+        const flipContainer = document.getElementById('flip-container');
+        let flipTimeout; // Déclaration de flipTimeout
+
+        function displayCard(index) {
+            const card = cards[index];
+            hasFlipped = false;
+            
+            // Reset visuel
+            gsap.set(flipContainer, { rotationY: 0 });
+            document.getElementById('action-btn').classList.remove('visible');
+            
+            // Crée l'élément de la carte
+            const cardEl = makeModalCardEl(card);
+            // *** LE CORRECTIF CLÉ : Réactive les événements de la souris sur la carte ***
+            cardEl.style.pointerEvents = 'auto';
+            
+            // Ajoute un écouteur de clic direct à la carte affichée pour ouvrir la modale
+            // Ceci est déclenché UNIQUEMENT lorsque la carte est déjà retournée (face visible)
+            cardEl.addEventListener('click', (event) => {
+                event.stopPropagation(); // Empêche le clic de se propager au flipContainer
+                openCardModal(cards[currentIndex]);
+            });
+
+            // Injection de la carte dans le conteneur
+            const wrap = document.getElementById('modal-card-el-pull');
+            wrap.innerHTML = '';
+            wrap.appendChild(cardEl); 
+            
+            // Gère le clic sur le flipContainer pour le retournement initial
+            // Cet écouteur est réinitialisé à chaque affichage de carte
+            flipContainer.onclick = () => {
+                if (!hasFlipped) {
+                    triggerFlip();
+                }
+            };
+
+            // Timer 3s automatique pour retourner la carte
+            clearTimeout(flipTimeout);
+            flipTimeout = setTimeout(triggerFlip, 3000);
+        }
+
+        function triggerFlip() {
+            if (hasFlipped) return; // Empêche de retourner plusieurs fois
+            hasFlipped = true;
+            clearTimeout(flipTimeout); // Annule le retournement auto si on a cliqué avant
+
+            gsap.to(flipContainer, { 
+                rotationY: 180, 
+                duration: 0.8, 
+                ease: "power2.out",
+                onComplete: () => {
+                    createParticles(cards[currentIndex].rarity.toLowerCase());
+                    
+                    // Affiche le bouton "Continuer" / "Terminer"
+                    const btn = document.getElementById('action-btn');
+                    btn.innerText = (currentIndex < cards.length - 1) ? "Continuer" : "Terminer";
+                    btn.classList.add('visible');
+                }
+            });
+        }
+
+        function handleAction() {
+            if (currentIndex < cards.length - 1) {
+                currentIndex++;
+                displayCard(currentIndex);
+            } else {
+                window.location.href = "/collection"; // Redirige vers la collection pour voir les nouvelles cartes
+            }
+        }
+
+        function createParticles(rarity) {
+            const colors = { 
+                rare: '#4a9eff', epique: '#b06bff', legendaire: '#ffb830', 
+                mythique: '#ff2d55', goat: '#39ff6a', hess: '#8a8a9a' 
+            };
+            const color = colors[rarity] || '#ffffff';
+
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.backgroundColor = color;
+                document.body.appendChild(p);
+                
+                gsap.fromTo(p, {
+                    x: window.innerWidth/2, y: window.innerHeight/2, opacity: 1
+                }, {
+                    x: (Math.random() - 0.5) * 600 + window.innerWidth/2,
+                    y: (Math.random() - 0.5) * 600 + window.innerHeight/2,
+                    opacity: 0,
+                    duration: 1.5,
+                    onComplete: () => p.remove()
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(cards.length > 0) {
+                displayCard(0);
+            } else {
+                // S'il n'y a pas de cartes (par ex. toutes collectées), on redirige
+                window.location.href = "/?message=Vous avez déjà toutes les cartes !";
+            }
+        });
+    </script>
+</body>
+</html>

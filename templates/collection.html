@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <title>Collection - TeaMasters</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-collec.css') }}">
+</head>
+<body>
+  
+  {% with active_page='collection' %}
+    {% include 'header.html' %}
+  {% endwith %}
+
+  <main class="main-content">
+      <h1 class="page-title">Ma collection (<span id="card-count-display">{{ stats.total }}</span>)</h1>
+      <div class="coll-stats">
+        <div class="stat-chip" data-filter="all">
+            <span class="n">{{ stats.total }}</span>
+            <span class="lbl">Total</span>
+        </div>
+        <div class="stat-chip" data-filter="hess">
+            <span class="n badge-hess">{{ stats.hess }}</span>
+            <span class="lbl">Hess</span>
+        </div>
+        <div class="stat-chip" data-filter="rare">
+            <span class="n badge-rare">{{ stats.rare }}</span>
+            <span class="lbl">Rares</span>
+        </div>
+        <div class="stat-chip" data-filter="epique">
+            <span class="n badge-epique">{{ stats.epique }}</span>
+            <span class="lbl">Épiques</span>
+        </div>
+        <div class="stat-chip" data-filter="legendaire">
+            <span class="n badge-legendaire">{{ stats.legendaire }}</span>
+            <span class="lbl">Légendaires</span>
+        </div>
+        <div class="stat-chip" data-filter="mythique">
+            <span class="n badge-mythique">{{ stats.mythique }}</span>
+            <span class="lbl">Mythiques</span>
+        </div>
+        <div class="stat-chip" data-filter="goat">
+            <span class="n badge-goat">{{ stats.goat }}</span>
+            <span class="lbl">GOAT</span>
+        </div>
+      </div>
+      <div class="coll-filter-wrap">
+        <div class="coll-search-wrap">
+          <input class="coll-search" id="coll-search" type="text" placeholder="Rechercher une carte..." oninput="filterCards()">
+        </div>
+        <div class="coll-filter">
+          <button class="filter-btn active" data-filter="all">Toutes</button>
+          <button class="filter-btn" data-filter="goat">GOAT</button>
+          <button class="filter-btn" data-filter="mythique">Mythiques</button>
+          <button class="filter-btn" data-filter="legendaire">Légendaires</button>
+          <button class="filter-btn" data-filter="epique">Épiques</button>
+          <button class="filter-btn" data-filter="rare">Rares</button>
+          <button class="filter-btn" data-filter="hess">Hess</button>
+        </div>
+      </div>
+      <div class="coll-grid">
+        {% for card in collection %}
+            <div class="card card-item-logic {{ card.rarity|lower }}" data-name="{{ card.name|lower }}" data-rarity="{{ card.rarity|lower }}" onclick='openCardModal({{ card | tojson | safe }})'>
+                {% if card.rarity|lower == 'mythique' %}<div class="mythique-border"></div>{% endif %}
+                {% if card.rarity|lower == 'goat' %}<div class="goat-border"></div>{% endif %}
+                <div class="card-photo">
+                    {% if card.photo %}
+                        <img src="{{ url_for('static', filename='uploads/' + card.photo) }}" alt="{{ card.name }}">
+                    {% else %}
+                        <div class="card-photo-initials">{{ card.initials or card.name[:2] }}</div>
+                    {% endif %}
+                    <div class="card-photo-fade"></div>
+                </div>
+                <div class="card-top">
+                    <div class="rarity-badge">{{ card.rarity }}</div>
+                    {% if card.rarity|lower in ['legendaire', 'mythique', 'goat'] %}
+                        <div class="card-star">★</div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="card-name">{{ card.name }}</div>
+                    <div class="card-role">{{ card.role or 'Sans rôle' }}</div>
+                    <div class="card-desc">{{ card.description or '' }}</div>
+                </div>
+            </div>
+        {% else %}
+            <div class="coll-empty">
+                <p>Ta collection est vide. Ouvre un booster pour obtenir tes premières cartes !</p>
+                <a href="/" class="btn-primary" style="text-decoration: none; display: inline-block; margin-top: 15px;">Ouvrir un paquet</a>
+            </div>
+        {% endfor %}
+      </div>  
+  </main>
+
+  {% include 'card_modal.html' %}
+
+    <script>
+        // --- SCRIPT DE FILTRAGE EXISTANT ---
+        const searchInput = document.getElementById('coll-search');
+        const filterButtons = document.querySelectorAll('.filter-btn, .stat-chip');
+        const cards = document.querySelectorAll('.card-item-logic');
+        const cardCountDisplay = document.getElementById('card-count-display');
+        let currentRarityFilter = 'all';
+
+        function filterCards() {
+            const searchQuery = searchInput.value.toLowerCase();
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardName = card.getAttribute('data-name');
+                const cardRarity = card.getAttribute('data-rarity');
+
+                // Normalisation é / e pour les épiques/légendaires
+                const normalizedRarity = cardRarity.replace('é', 'e');
+                const normalizedFilter = currentRarityFilter.replace('é', 'e');
+
+                const matchesSearch = cardName.includes(searchQuery);
+                const matchesRarity = (normalizedFilter === 'all' || normalizedRarity === normalizedFilter);
+
+                if (matchesSearch && matchesRarity) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            cardCountDisplay.textContent = visibleCount;
+        }
+
+        // Event recherche
+        searchInput.addEventListener('input', filterCards);
+
+        // Event boutons et compteurs de statistiques
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentRarityFilter = button.getAttribute('data-filter');
+                
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active', 'active-mythique', 'active-goat', 'active-hess');
+                    if (btn.getAttribute('data-filter') === currentRarityFilter) {
+                        btn.classList.add('active');
+                        if (['mythique', 'goat', 'hess'].includes(currentRarityFilter)) {
+                            btn.classList.add('active-' + currentRarityFilter);
+                        }
+                    }
+                });
+                filterCards();
+            });
+        });
+    </script>
+</body>
+</html>
