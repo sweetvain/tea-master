@@ -5,37 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil de {{ user.username }} - TeaMasters</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style-collec.css') }}">
-    <style>
-        .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 2rem; }
-        .profile-avatar {
-            width: 80px; height: 80px; border-radius: 50%; background: var(--surface2);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; font-family: 'Syne', sans-serif; font-weight: 800; color: var(--epique); border: 2px solid var(--border2);
-        }
-        .profile-info h1 { font-size: 2rem; margin: 0; }
-        .profile-info p { color: var(--muted); font-size: 1rem; }
-        .section-title {
-            font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem;
-            border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;
-        }
-        .coll-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2rem; }
-        .stat-chip { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 10px 16px; font-size: 13px; flex: 1; min-width: 76px; text-align: center; }
-        .stat-chip .n { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; display: block; line-height: 1.1; margin-bottom: 2px; }
-        .stat-chip .lbl { color: var(--muted); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
-        .stat-chip .n.badge-rare { color: var(--rare); }
-        .stat-chip .n.badge-epique { color: var(--epique); }
-        .stat-chip .n.badge-legendaire { color: var(--legendaire); }
-        .stat-chip .n.badge-mythique { color: var(--mythique); }
-        .stat-chip .n.badge-goat { color: var(--goat); text-shadow: 0 0 8px rgba(57,255,106,0.6); }
-        .stat-chip .n.badge-hess { color: var(--hess); }
-
-        .friends-list, .friend-suggestions { display: flex; flex-direction: column; gap: 10px; }
-        .friend-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; }
-        .friend-item span { font-weight: 500; }
-        .btn-add-friend, .btn-confirm-friend { background: var(--epique); color: white; border: none; padding: 8px 14px; border-radius: var(--radius-xs); cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s; }
-        .btn-remove-friend, .btn-reject-friend { background: #ff2d55; color: white; border: none; padding: 8px 14px; border-radius: var(--radius-xs); cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s; }
-        .btn-confirm-friend { background: #39ff6a; color: #080810; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 <body>
     {% with active_page='profile' %}
@@ -68,12 +38,12 @@
                 <div class="friend-item" id="req-box-{{ req.id }}">
                     <span>{{ req.sender.username }}</span>
                     <div style="display: flex; gap: 8px;">
-                        <button type="button" class="btn-confirm-friend" onclick="answerRequest('{{ req.id }}', 'accept')">Accepter</button>
-                        <button type="button" class="btn-reject-friend" onclick="answerRequest('{{ req.id }}', 'reject')">Refuser</button>
+                        <button type="button" class="btn-confirm-friend" data-action="accept" data-request-id="{{ req.id }}">Accepter</button>
+                        <button type="button" class="btn-reject-friend" data-action="reject" data-request-id="{{ req.id }}">Refuser</button>
                     </div>
                 </div>
             {% else %}
-                <p id="no-pending-msg" style="color: var(--muted); font-size: 14px;">Aucune invitation reçue pour le moment.</p>
+                <p id="no-pending-msg" class="empty-msg">Aucune invitation reçue pour le moment.</p>
             {% endfor %}
         </div>
 
@@ -82,10 +52,10 @@
             {% for f in friends %}
                 <div class="friend-item" id="friend-box-{{ f.username }}">
                     <span>{{ f.username }}</span>
-                    <button type="button" class="btn-remove-friend" onclick="removeFriend('{{ f.username }}')">Supprimer</button>
+                    <button type="button" class="btn-remove-friend" data-action="remove-friend" data-username="{{ f.username }}">Supprimer</button>
                 </div>
             {% else %}
-                <p id="no-friends-msg" style="color: var(--muted); font-size: 14px;">Tu n'as pas encore d'amis.</p>
+                <p id="no-friends-msg" class="empty-msg">Tu n'as pas encore d'amis.</p>
             {% endfor %}
         </div>
 
@@ -94,103 +64,12 @@
             {% for u in friend_suggestions %}
                 <div class="friend-item" id="suggest-box-{{ u.username }}">
                     <span>{{ u.username }}</span>
-                    <button type="button" class="btn-add-friend" onclick="sendRequestFromSuggest('{{ u.username }}')">Ajouter</button>
+                    <button type="button" class="btn-add-friend" data-action="add-friend" data-username="{{ u.username }}">Ajouter</button>
                 </div>
             {% endfor %}
         </div>
     </main>
 
-<script>
-// Traitement des invitations reçues (Accepter / Refuser)
-function answerRequest(requestId, action) {
-    const url = action === 'accept' ? `/accept_friend_request/${requestId}` : `/reject_friend_request/${requestId}`;
-    const reqBox = document.getElementById(`req-box-${requestId}`);
-    
-    fetch(url, { method: 'POST' })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification(data.message, "success");
-            
-            // Animation de disparition GSAP de la ligne d'invitation
-            gsap.to(reqBox, {
-                opacity: 0, x: -30, duration: 0.3, onComplete: () => {
-                    reqBox.remove();
-                    
-                    // Vérifie s'il reste des invitations en attente affichées
-                    const pendingList = document.getElementById('pending-list');
-                    if (pendingList.children.length === 0) {
-                        pendingList.innerHTML = '<p id="no-pending-msg" style="color: var(--muted); font-size: 14px;">Aucune invitation reçue pour le moment.</p>';
-                    }
-                }
-            });
-
-            // Si c'est accepté, au lieu de recharger, on demande un reload léger après 1s pour reconstruire la liste proprement
-            if (action === 'accept') {
-                setTimeout(() => window.location.reload(), 1000);
-            }
-        } else {
-            showNotification(data.error, "error");
-        }
-    })
-    .catch(err => showNotification("Erreur de connexion", "error"));
-}
-
-// Envoyer une invitation via la liste des suggestions de la page profil
-function sendRequestFromSuggest(username) {
-    const suggestBox = document.getElementById(`suggest-box-${username}`);
-    
-    fetch(`/send_friend_request/${username}`, { method: 'POST' })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification(data.message, "success");
-            
-            // Animation GSAP pour faire disparaître le joueur suggéré
-            gsap.to(suggestBox, {
-                opacity: 0, y: -15, duration: 0.35, onComplete: () => {
-                    suggestBox.remove();
-                }
-            });
-        } else {
-            showNotification(data.error, "error");
-        }
-    })
-    .catch(err => showNotification("Erreur de connexion", "error"));
-}
-
-// Supprimer un ami existant
-function removeFriend(username) {
-    if(!confirm(`Retirer ${username} de tes amis ?`)) return;
-
-    const friendBox = document.getElementById(`friend-box-${username}`);
-
-    fetch(`/remove_friend/${username}`, { method: 'POST' })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification(data.message, "info");
-            
-            // Animation de retrait
-            gsap.to(friendBox, {
-                opacity: 0, scale: 0.9, duration: 0.3, onComplete: () => {
-                    friendBox.remove();
-                    
-                    const friendsList = document.getElementById('friends-list');
-                    if (friendsList.children.length === 0) {
-                        friendsList.innerHTML = '<p id="no-friends-msg" style="color: var(--muted); font-size: 14px;">Tu n\'as pas encore d\'amis.</p>';
-                    }
-                }
-            });
-            
-            // Rechargement léger pour re-proposer la personne dans les suggestions
-            setTimeout(() => window.location.reload(), 1000);
-        } else {
-            showNotification(data.error, "error");
-        }
-    })
-    .catch(err => showNotification("Erreur de connexion", "error"));
-}
-</script>
+<script src="{{ url_for('static', filename='js/friends.js') }}"></script>
 </body>
 </html>

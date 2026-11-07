@@ -49,7 +49,7 @@
       </div>
       <div class="coll-filter-wrap">
         <div class="coll-search-wrap">
-          <input class="coll-search" id="coll-search" type="text" placeholder="Rechercher une carte..." oninput="filterCards()">
+          <input class="coll-search" id="coll-search" type="text" placeholder="Rechercher une carte...">
         </div>
         <div class="coll-filter">
           <button class="filter-btn active" data-filter="all">Toutes</button>
@@ -97,59 +97,6 @@
 
   {% include 'card_modal.html' %}
 
-    <script>
-        // --- SCRIPT DE FILTRAGE EXISTANT ---
-        const searchInput = document.getElementById('coll-search');
-        const filterButtons = document.querySelectorAll('.filter-btn, .stat-chip');
-        const cards = document.querySelectorAll('.card-item-logic');
-        const cardCountDisplay = document.getElementById('card-count-display');
-        let currentRarityFilter = 'all';
-
-        function filterCards() {
-            const searchQuery = searchInput.value.toLowerCase();
-            let visibleCount = 0;
-
-            cards.forEach(card => {
-                const cardName = card.getAttribute('data-name');
-                const cardRarity = card.getAttribute('data-rarity');
-
-                // Normalisation é / e pour les épiques/légendaires
-                const normalizedRarity = cardRarity.replace('é', 'e');
-                const normalizedFilter = currentRarityFilter.replace('é', 'e');
-
-                const matchesSearch = cardName.includes(searchQuery);
-                const matchesRarity = (normalizedFilter === 'all' || normalizedRarity === normalizedFilter);
-
-                if (matchesSearch && matchesRarity) {
-                    card.style.display = '';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-            cardCountDisplay.textContent = visibleCount;
-        }
-
-        // Event recherche
-        searchInput.addEventListener('input', filterCards);
-
-        // Event boutons et compteurs de statistiques
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                currentRarityFilter = button.getAttribute('data-filter');
-                
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.classList.remove('active', 'active-mythique', 'active-goat', 'active-hess');
-                    if (btn.getAttribute('data-filter') === currentRarityFilter) {
-                        btn.classList.add('active');
-                        if (['mythique', 'goat', 'hess'].includes(currentRarityFilter)) {
-                            btn.classList.add('active-' + currentRarityFilter);
-                        }
-                    }
-                });
-                filterCards();
-            });
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/collection.js') }}"></script>
 </body>
 </html>
