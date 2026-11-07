@@ -45,7 +45,8 @@ pytest
 | le nom / la série affichés | variables `PACK_NAME` et `PACK_SERIES` (`.env` ou Vercel) |
 | les couleurs de la feuille du paquet | `--foil`, `--accent` en haut de `static/css/pack.css` |
 | le nombre de cartes par paquet | `CARDS_PER_PACK` dans `config.py` |
-| le fond animé (lueurs, feuilles, grille) | `static/css/theme.css` + `templates/_background.html` |
+| les couleurs du thème « verre dépoli / thé chaud » | variables en haut de `static/css/glass.css` (chargé en dernier sur chaque page) |
+| le fond animé (lueurs, feuilles) | `static/css/theme.css` + `templates/_background.html` |
 | les effets par rareté (particules, secousse) | `RARITIES` et `BURST_COUNT` dans `static/js/pack.js` |
 
 Ouverture d'un paquet : on déchire le paquet (glisser, toucher ou Entrée), puis on choisit dans quel ordre retourner les cartes (ou « Tout révéler »). Sans JavaScript, le formulaire `/pull` reste utilisable.

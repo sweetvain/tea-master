@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("touchstart", prefetch, { passive: true });
 })();
 
-const TOAST_INDICATORS = { success: "✔ SUCCESS", error: "✘ ERROR", info: "✦" };
+const TOAST_INDICATORS = { success: "✔ Super !", error: "✘ Oups", info: "✦ Info" };
 
 function showNotification(message, type = "info") {
     const container = document.getElementById("toast-container");
@@ -81,7 +81,7 @@ function submitInviteFromModal() {
     const username = document.getElementById("modal-friend-username").value.trim();
 
     if (!username) {
-        showNotification("CANAL INVALIDE : ENTRE UN PSEUDO VIA L'ID", "error");
+        showNotification("Entre le pseudo de ton ami.", "error");
         return;
     }
 
@@ -89,14 +89,14 @@ function submitInviteFromModal() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showNotification(data.message.toUpperCase(), "success");
+                showNotification(data.message, "success");
                 closeInviteModal(null);
                 if (window.location.pathname === "/profile") {
                     setTimeout(() => window.location.reload(), 1000);
                 }
             } else {
-                showNotification((data.error || "ERREUR").toUpperCase(), "error");
+                showNotification((data.error || "Une erreur est survenue"), "error");
             }
         })
-        .catch(() => showNotification("PANNE SYSTÈME NETWORK", "error"));
+        .catch(() => showNotification("Connexion impossible, réessaie.", "error"));
 }

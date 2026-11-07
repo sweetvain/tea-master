@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     {% include '_head.html' %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un Module // TeaMasters</title>
+    <title>Créer une carte · TeaMasters</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style-collec.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
 </head>
 <body>
 
@@ -15,50 +16,50 @@
     {% endwith %}
 
     <main class="create-container">
-        <h1 class="page-cyber-title">DATA // COMPILER_UNIT</h1>
-        <p class="page-cyber-subtitle">Générer et injecter un nouveau module de carte dans le système central</p>
+        <h1 class="page-cyber-title">Crée ta carte ✦</h1>
+        <p class="page-cyber-subtitle">Ajoute une nouvelle carte à la collection de la bande</p>
 
         <form id="cyber-create-form" enctype="multipart/form-data">
             <div class="cyber-form-grid">
                 
                 <!-- ZONE GLISSADE IMAGE (DRAG & DROP) -->
                 <div class="cyber-dropzone" id="dropzone" onclick="document.getElementById('photo-input').click()">
-                    <div class="dropzone-icon" id="dz-icon">⎋</div>
-                    <p class="dropzone-infotext" id="dz-text">GLISSER & DÉPOSER UNE MATRIX_IMAGE<br><span style="font-size:11px; opacity:0.5;">OU CLIQUER ICI</span></p>
+                    <div class="dropzone-icon" id="dz-icon">🍵</div>
+                    <p class="dropzone-infotext" id="dz-text">Glisse &amp; dépose une image<br><span style="font-size:11px; opacity:0.5;">ou clique ici</span></p>
                     <input type="file" name="photo" id="photo-input" class="dropzone-input" accept="image/*">
                     
                     <!-- Conteneur de prévisualisation -->
                     <div class="cyber-preview-container" id="preview-container">
                         <img src="" alt="Aperçu" class="cyber-preview-img" id="preview-img">
-                        <div class="cyber-preview-overlay">FICHIER CHARGÉ AVEC SUCCÈS // APPUYER POUR CHANGER</div>
+                        <div class="cyber-preview-overlay">Image chargée ✓ clique pour en changer</div>
                     </div>
                 </div>
 
                 <!-- FORMULAIRE DE DONNÉES -->
                 <div>
                     <div class="cyber-form-group">
-                        <label for="name">Nom du module</label>
-                        <input type="text" id="name" name="name" class="cyber-input" placeholder="Ex: Cyber Dragon V2..." required autocomplete="off">
+                        <label for="name">Nom de la carte</label>
+                        <input type="text" id="name" name="name" class="cyber-input" placeholder="Ex: Chipie de terrain" required autocomplete="off">
                     </div>
 
                     <div class="form-row-twin">
                         <div class="cyber-form-group">
-                            <label for="initials">Initiales (Tag)</label>
-                            <input type="text" id="initials" name="initials" class="cyber-input" placeholder="Ex: CD2" maxlength="5" required autocomplete="off">
+                            <label for="initials">Initiales</label>
+                            <input type="text" id="initials" name="initials" class="cyber-input" placeholder="Ex: CT" maxlength="5" required autocomplete="off">
                         </div>
                         <div class="cyber-form-group">
-                            <label for="power">Puissance énergétique</label>
+                            <label for="power">Puissance</label>
                             <input type="number" id="power" name="power" class="cyber-input" placeholder="Ex: 95" required autocomplete="off">
                         </div>
                     </div>
 
                     <div class="form-row-twin">
                         <div class="cyber-form-group">
-                            <label for="role">Spécialisation (Rôle)</label>
-                            <input type="text" id="role" name="role" class="cyber-input" placeholder="Ex: Netrunner" required autocomplete="off">
+                            <label for="role">Rôle</label>
+                            <input type="text" id="role" name="role" class="cyber-input" placeholder="Ex: Chasseuse de potins" required autocomplete="off">
                         </div>
                         <div class="cyber-form-group">
-                            <label for="rarity">Indice de rareté</label>
+                            <label for="rarity">Rareté</label>
                             <select id="rarity" name="rarity" class="cyber-select" required>
                                 <option value="Hess">Hess</option>
                                 <option value="Rare">Rare</option>
@@ -71,15 +72,15 @@
                     </div>
 
                     <div class="cyber-form-group">
-                        <label for="description">Spécifications techniques (Description)</label>
-                        <textarea id="description" name="description" class="cyber-textarea" placeholder="Entrer les détails du noyau algorithmique..." required></textarea>
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" class="cyber-textarea" placeholder="Raconte l'histoire de la carte..." required></textarea>
                     </div>
                 </div>
 
                 <!-- BOUTON ENVOI -->
                 <div class="cyber-submit-wrapper">
                     <button type="submit" class="btn-cyber-generate" id="btn-submit">
-                        INJECTER LA CARTE DANS LE SYSTEME
+                        Ajouter la carte à la collection ✦
                     </button>
                 </div>
 

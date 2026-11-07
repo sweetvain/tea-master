@@ -1,4 +1,4 @@
-    body { background: #080810; color: #fff; font-family: 'Share Tech Mono', monospace; padding-top: 80px; }
+    body { background: #080810; color: #fff; font-family: 'Nunito', sans-serif; padding-top: 80px; }
     .admin-container { max-width: 600px; margin: 0 auto; padding: 30px; background: rgba(12, 11, 20, 0.9); border: 1px solid rgba(176, 107, 255, 0.3); border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
     h1 { color: var(--neon-blue, #00f0ff); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; text-align: center; }
     
@@ -25,7 +25,7 @@
         border: 1px solid var(--neon-blue, #00f0ff);
         color: var(--neon-blue, #00f0ff);
         cursor: pointer;
-        font-family: 'Orbitron', sans-serif;
+        font-family: 'Fredoka', sans-serif;
         text-transform: uppercase;
         font-weight: bold;
         transition: 0.3s;

@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     {% include '_head.html' %}
-    <title>TeaMasters // Admin Terminal</title>
+    <title>TeaMasters ? Administration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style-pack.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
 </head>
 <body>
 
     {% include 'header.html' %}
 
     <div class="admin-wrapper">
-        <h1>// DASHBOARD ADMINISTRATEUR</h1>
+        <h1>Tableau de bord admin</h1>
 
         <section class="admin-section">
             <h2>Gestion Utilisateurs</h2>
@@ -31,11 +32,11 @@
                         <td>{{ "ADMIN" if u.is_admin else "USER" }}</td>
                         <td>
                             <form action="{{ url_for('admin.toggle_admin', user_id=u.id) }}" method="POST" style="display:inline;">
-                                <button class="btn-admin">TOGGLE ADMIN</button>
+                                <button class="btn-admin">Admin on/off</button>
                             </form>
                             {% if u.username|lower != protected_username|lower and u.id != current_user.id %}
                             <form action="{{ url_for('admin.delete_user', user_id=u.id) }}" method="POST" style="display:inline;">
-                                <button class="btn-admin btn-del">BAN</button>
+                                <button class="btn-admin btn-del">Bannir</button>
                             </form>
                             {% endif %}
                         </td>
@@ -59,7 +60,7 @@
                     <option value="GOAT">GOAT</option>
                 </select>
                 <input type="file" name="photo" accept="image/*">
-                <button type="submit" class="btn-admin" style="border-color: var(--neon-green); color: var(--neon-green);">AJOUTER</button>
+                <button type="submit" class="btn-admin" style="border-color: var(--neon-green); color: var(--neon-green);">Ajouter</button>
             </form>
 
             <table class="cyber-table">
@@ -76,9 +77,9 @@
                         <td>{{ c.name }}</td>
                         <td>{{ c.rarity }}</td>
                         <td>
-                            <a href="{{ url_for('admin.edit_card', card_id=c.id) }}" class="btn-admin">MODIFIER</a>
+                            <a href="{{ url_for('admin.edit_card', card_id=c.id) }}" class="btn-admin">Modifier</a>
                             <form action="{{ url_for('admin.delete_card', card_id=c.id) }}" method="POST" style="display:inline;">
-                                <button class="btn-admin btn-del">DELETE</button>
+                                <button class="btn-admin btn-del">Supprimer</button>
                             </form>
                         </td>
                     </tr>

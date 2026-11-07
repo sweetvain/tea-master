@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     {% include '_head.html' %}
-    <title>Edit Card // Admin</title>
+    <title>Modifier une carte ? TeaMasters</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/edit-card.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
 </head>
 <body>
 
     {% include 'header.html' %}
 
     <div class="admin-container">
-        <h1>// EDITER: {{ card.name }}</h1>
+        <h1>Modifier : {{ card.name }}</h1>
         
         <form method="POST" enctype="multipart/form-data">
             <div class="form-group">
@@ -46,7 +47,7 @@
                 <input type="file" name="photo">
             </div>
 
-            <button type="submit" class="btn-submit">SAUVEGARDER LES MODIFICATIONS</button>
+            <button type="submit" class="btn-submit">Enregistrer les modifications</button>
         </form>
     </div>
 

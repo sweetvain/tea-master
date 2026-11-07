@@ -201,9 +201,9 @@
             .to(tilt, { rotationX: 0, rotationY: 0, rotationZ: 0, duration: 0.3 }, 0)
             .to(mainEl, { y: 3, duration: 0.06, repeat: 7, yoyo: true, ease: "none" }, 0.1)
             .add(() => {
-                TeaFX.burst(tearX, tearY, "#00f0ff", 60, 1.1);
+                TeaFX.burst(tearX, tearY, "#ffd98a", 60, 1.1);
                 TeaFX.burst(tearX, tearY, "#ffffff", 30, 0.8);
-                TeaFX.flash("#00f0ff", 0.3);
+                TeaFX.flash("#ffd98a", 0.3);
                 if (navigator.vibrate) navigator.vibrate(25);
             }, 0.05)
             .add(() => burstEl.remove(), 0.75);

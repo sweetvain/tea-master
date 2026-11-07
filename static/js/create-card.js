@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showPreview(file) {
         if (!file.type.startsWith("image/")) {
-            showNotification("FORMAT DE FICHIER INVALIDE", "error");
+            showNotification("Ce fichier n'est pas une image.", "error");
             return;
         }
         const reader = new FileReader();
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             previewImg.src = reader.result;
             previewContainer.style.display = "flex";
             gsap.fromTo(previewContainer, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" });
-            showNotification("FICHIER IMPORTÉ DANS LE BUFFER", "info");
+            showNotification("Image ajoutée ✓", "info");
         };
         reader.readAsDataURL(file);
     }
@@ -74,13 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json().catch(() => ({}));
 
             if (response.ok && data.success) {
-                showNotification("CARTE ENREGISTRÉE AVEC SUCCÈS IN DB", "success");
+                showNotification("Carte ajoutée à la collection !", "success");
                 resetForm();
             } else {
-                showNotification((data.error || "ERREUR LORS DE L'INJECTION DES DONNÉES").toUpperCase(), "error");
+                showNotification((data.error || "Impossible d'ajouter la carte."), "error");
             }
         } catch {
-            showNotification("PANNE RÉSEAU : SERVEUR INDISPONIBLE", "error");
+            showNotification("Connexion impossible, réessaie.", "error");
         }
     });
 });

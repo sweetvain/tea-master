@@ -18,14 +18,14 @@
 
     <div class="header-right">
         <button class="cyber-btn-invite" onclick="openInviteModal(event)">
-            <span class="btn-glitch-text">INVITER DES AMIS</span>
+            <span class="btn-glitch-text">Inviter des amis</span>
             <span class="btn-icon">✦</span>
         </button>
         <div class="cyber-user-profile">
             <div class="cyber-avatar">{{ current_user.username[:2]|upper }}</div>
             <div class="cyber-user-info">
                 <span class="cyber-username">{{ current_user.username }}</span>
-                <a href="{{ url_for('auth.logout') }}" class="cyber-logout-btn">DISCONNECT</a>
+                <a href="{{ url_for('auth.logout') }}" class="cyber-logout-btn">Déconnexion</a>
             </div>
         </div>
     </div>
@@ -45,11 +45,11 @@
         <div class="modal-corner bottom-right"></div>
         <button class="cyber-modal-close" onclick="closeInviteModal(null)">✕</button>
 
-        <h2 class="cyber-modal-title">HACK // TRANSMIT_INVITE</h2>
+        <h2 class="cyber-modal-title">Inviter un ami ☕</h2>
         <p class="cyber-modal-subtitle">Entre le canal utilisateur exact pour synchroniser vos bases de données.</p>
 
         <div class="cyber-modal-form">
-            <input type="text" id="modal-friend-username" placeholder="USER_TAG_ID..." autocomplete="off">
+            <input type="text" id="modal-friend-username" placeholder="Pseudo de ton ami..." autocomplete="off">
             <button type="button" class="cyber-btn-submit" onclick="submitInviteFromModal()">INITIALISER LA REQUÊTE</button>
         </div>
     </div>

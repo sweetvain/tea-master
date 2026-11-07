@@ -1,0 +1,226 @@
+/* ==========================================================================
+   THÈME GLASSMORPHISM « THÉ CHAUD » : chargé en dernier, il recolore tout le site.
+   Pour changer l'ambiance : modifier les variables ci-dessous.
+   ========================================================================== */
+:root {
+    --bg: #25120b;
+    --surface: rgba(255, 246, 232, .10);
+    --surface2: rgba(255, 246, 232, .16);
+    --surface3: rgba(255, 246, 232, .24);
+    --border: rgba(255, 255, 255, .16);
+    --border2: rgba(255, 255, 255, .30);
+    --text: #fff7ec;
+    --muted: #e6cfb3;
+
+    --glass: rgba(255, 244, 228, .12);
+    --glass-border: rgba(255, 255, 255, .28);
+    --glass-blur: blur(18px) saturate(150%);
+    --glass-shadow: 0 8px 32px rgba(60, 20, 5, .35), inset 0 1px 0 rgba(255, 255, 255, .35);
+
+    --tea-amber: #ffc46b;
+    --tea-honey: #ffd98a;
+    --tea-peach: #ff9a76;
+    --tea-rose: #ff6b81;
+    --tea-matcha: #a8e063;
+    --tea-ink: #3a1d12;
+    --tea-gradient: linear-gradient(135deg, #ffc46b, #ff9a76);
+
+    /* anciens noms utilisés par certaines pages */
+    --neon-blue: #ffc46b;
+    --neon-purple: #ff9a76;
+    --neon-green: #a8e063;
+    --neon-red: #ff6b81;
+    --cyber-bg: var(--glass);
+    --radius: 22px;
+    --radius-sm: 14px;
+}
+
+body {
+    font-family: 'Nunito', 'Inter', sans-serif;
+    color: var(--text);
+}
+
+h1, h2, h3, .page-title, .section-title {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    text-shadow: none;
+}
+
+/* --- Panneaux de verre --- */
+.stat-chip, .coll-search, .coll-filter, .friend-item, .pack-counter, .auth-box,
+.admin-section, .cyber-form-grid, .admin-container, .alert-box, .profile-avatar {
+    background: var(--glass);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+.auth-box, .admin-section, .cyber-form-grid, .admin-container { border-radius: 26px; }
+.pack-counter, .friend-item, .stat-chip { border-radius: 18px; }
+.stat-chip { background: rgba(58, 24, 12, .34); transition: transform .2s ease, background .2s ease; }
+.stat-chip:hover { transform: translateY(-3px); background: rgba(58, 24, 12, .46); }
+.stat-chip .n { text-shadow: 0 1px 8px rgba(30, 10, 3, .5); }
+.stat-chip .n.badge-hess { color: #cfcfdc; }
+.stat-chip .n.badge-mythique { color: #ff8fa3; }
+.stat-chip .n.badge-rare { color: #7fbcff; }
+.coll-search, .coll-filter { background: rgba(58, 24, 12, .3); }
+.coll-search { border-radius: 16px; }
+.alert-box { padding: 10px 18px; border-radius: 16px; }
+
+.card-modal-overlay, .cyber-modal-overlay {
+    background: rgba(40, 16, 8, .55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* --- Titres --- */
+.page-title, .page-cyber-title {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    text-shadow: 0 2px 12px rgba(60, 20, 5, .35);
+}
+.page-cyber-subtitle {
+    font-family: 'Nunito', sans-serif;
+    text-transform: none;
+    color: var(--muted);
+}
+
+/* --- Champs --- */
+input[type=text], input[type=password], input[type=number], .cyber-input, .cyber-textarea, .cyber-select,
+.add-form input, .add-form select, .admin-container input, .admin-container select, .admin-container textarea,
+.coll-search {
+    background: rgba(255, 255, 255, .12);
+    border: 1px solid rgba(255, 255, 255, .28);
+    border-radius: 14px;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    outline: none;
+}
+input::placeholder, textarea::placeholder { color: rgba(255, 247, 236, .5); }
+input:focus, .cyber-input:focus, .cyber-textarea:focus, .cyber-select:focus, .coll-search:focus,
+.admin-container input:focus, .admin-container select:focus, .admin-container textarea:focus {
+    border-color: var(--tea-honey);
+    box-shadow: 0 0 0 3px rgba(255, 217, 138, .25);
+}
+select option { background: #4a2616; color: var(--text); }
+.cyber-form-group label, .form-label, .admin-container label {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: .2px;
+    color: var(--muted);
+}
+
+/* --- Boutons --- */
+.btn-primary, .btn-cyber-generate, .btn-submit,
+.btn-add-friend, .btn-confirm-friend {
+    background: var(--tea-gradient);
+    color: var(--tea-ink);
+    border: 0;
+    border-radius: 14px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    letter-spacing: .2px;
+    text-transform: none;
+    box-shadow: 0 6px 18px rgba(255, 138, 101, .4), inset 0 1px 0 rgba(255, 255, 255, .5);
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn-primary:hover:not(:disabled), .btn-cyber-generate:hover, .btn-submit:hover,
+.btn-add-friend:hover, .btn-confirm-friend:hover {
+    background: var(--tea-gradient);
+    color: var(--tea-ink);
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow: 0 10px 26px rgba(255, 138, 101, .55), inset 0 1px 0 rgba(255, 255, 255, .5);
+    opacity: 1;
+}
+.btn-primary:disabled {
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .2);
+    color: var(--muted);
+    box-shadow: none;
+    opacity: .7;
+}
+.btn-confirm-friend { background: linear-gradient(135deg, #c5ee8a, #a8e063); color: #2b3a12; }
+.btn-remove-friend, .btn-reject-friend {
+    background: rgba(255, 107, 129, .25);
+    border: 1px solid rgba(255, 107, 129, .6);
+    color: #ffd6dd;
+    border-radius: 12px;
+}
+.btn-remove-friend:hover, .btn-reject-friend:hover { background: var(--tea-rose); color: #fff; }
+
+.btn-admin {
+    background: rgba(255, 255, 255, .12);
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 999px;
+    color: var(--text);
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 500;
+    padding: 6px 14px;
+}
+.btn-admin:hover { background: var(--tea-gradient); color: var(--tea-ink); border-color: transparent; }
+.btn-del { border-color: rgba(255, 107, 129, .6); color: #ffd6dd; }
+.btn-del:hover { background: var(--tea-rose); color: #fff; }
+
+.btn-ghost { border-radius: 14px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
+/* --- Filtres collection --- */
+.filter-btn { font-family: 'Fredoka', sans-serif; font-weight: 500; }
+.filter-btn:hover { background: rgba(255, 255, 255, .12); }
+.filter-btn.active { background: rgba(255, 255, 255, .22); border-color: rgba(255, 255, 255, .4); }
+
+.pack-hint, .timer-text, .pack-counter p { color: var(--muted); }
+.pack-counter p { color: var(--text); }
+.pack-art { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 0 28px rgba(120, 50, 10, .3); }
+
+/* --- Connexion --- */
+.auth-logo {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 0%, #ffd98a 55%, #ff9a76 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.auth-screen::before { background: radial-gradient(ellipse at 50% 30%, rgba(255, 196, 107, .12) 0%, transparent 65%); }
+.switch-form-link a { color: var(--tea-honey); }
+.error-msg, .error-message { color: #ffb3a1; }
+
+/* --- Profil --- */
+.profile-avatar { color: var(--tea-honey); }
+
+/* --- Admin --- */
+.admin-wrapper h1, .admin-wrapper h2, .admin-container h1 {
+    font-family: 'Fredoka', sans-serif;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--tea-honey);
+}
+.cyber-table th { color: var(--tea-honey); border-bottom: 1px solid rgba(255, 217, 138, .5); font-family: 'Fredoka', sans-serif; font-weight: 500; }
+.cyber-table td { border-bottom: 1px solid rgba(255, 255, 255, .1); }
+
+/* --- Création de carte --- */
+.cyber-dropzone {
+    border: 2px dashed rgba(255, 255, 255, .4);
+    background: rgba(255, 255, 255, .07);
+    border-radius: 20px;
+}
+.cyber-dropzone.dragover { border-color: var(--tea-honey); background: rgba(255, 217, 138, .15); }
+.dropzone-infotext { font-family: 'Nunito', sans-serif; color: var(--muted); }
+.dropzone-icon { color: var(--tea-honey); text-shadow: none; }
+.cyber-preview-container { background: rgba(58, 29, 18, .9); }
+.cyber-preview-overlay {
+    background: rgba(58, 29, 18, .75);
+    color: var(--tea-honey);
+    font-family: 'Nunito', sans-serif;
+    border-top: 1px solid rgba(255, 255, 255, .2);
+}
+.btn-cyber-generate { font-size: 1.05rem; padding: 15px; }
+
+.current-img { border-radius: 14px; border: 1px solid var(--glass-border); }

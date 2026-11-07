@@ -2,17 +2,17 @@
     .profile-avatar {
         width: 80px; height: 80px; border-radius: 50%; background: var(--surface2);
         display: flex; align-items: center; justify-content: center;
-        font-size: 2.5rem; font-family: 'Syne', sans-serif; font-weight: 800; color: var(--epique); border: 2px solid var(--border2);
+        font-size: 2.5rem; font-family: 'Fredoka', sans-serif; font-weight: 800; color: var(--epique); border: 2px solid var(--border2);
     }
     .profile-info h1 { font-size: 2rem; margin: 0; }
     .profile-info p { color: var(--muted); font-size: 1rem; }
     .section-title {
-        font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem;
+        font-family: 'Fredoka', sans-serif; font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem;
         border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;
     }
     .coll-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2rem; }
     .stat-chip { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 10px 16px; font-size: 13px; flex: 1; min-width: 76px; text-align: center; }
-    .stat-chip .n { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; display: block; line-height: 1.1; margin-bottom: 2px; }
+    .stat-chip .n { font-family: 'Fredoka', sans-serif; font-size: 22px; font-weight: 800; display: block; line-height: 1.1; margin-bottom: 2px; }
     .stat-chip .lbl { color: var(--muted); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
     .stat-chip .n.badge-rare { color: var(--rare); }
     .stat-chip .n.badge-epique { color: var(--epique); }
