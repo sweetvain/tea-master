@@ -1,0 +1,198 @@
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap');
+
+:root {
+--neon-purple: #b06bff;
+--neon-blue: #00f0ff;
+--neon-green: #39ff6a;
+--neon-red: #ff2d55;
+--cyber-bg-dark: #080810;
+--surface-cyber: #0c0b14;
+--border-cyber: rgba(0, 240, 255, 0.15);
+}
+
+body {
+background-color: var(--cyber-bg-dark);
+color: #fff;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+margin: 0;
+padding: 0;
+}
+
+/* --- CENTRAGE PARFAIT DU BLOC --- */
+.create-container {
+width: 100%;
+max-width: 900px;
+margin: auto !important; /* Force le centrage vertical et horizontal restant */
+padding: 40px 20px;
+box-sizing: border-box;
+display: flex;
+margin-top: 110px !important;
+flex-direction: column;
+justify-content: center;
+}
+
+.page-cyber-title {
+font-family: 'Orbitron', sans-serif;
+font-weight: 900;
+font-size: 1.8rem;
+letter-spacing: 2px;
+margin-bottom: 8px;
+text-transform: uppercase;
+text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.page-cyber-subtitle {
+font-family: 'Share Tech Mono', monospace;
+color: #64647a;
+font-size: 14px;
+margin-bottom: 30px;
+text-transform: uppercase;
+}
+
+/* --- LAYOUT DU FORMULAIRE --- */
+.cyber-form-grid {
+display: grid;
+grid-template-columns: 1fr 1.2fr;
+gap: 30px;
+background: var(--surface-cyber);
+border: 1px solid var(--border-cyber);
+padding: 30px;
+border-radius: 4px;
+box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 15px rgba(0, 240, 255, 0.02);
+position: relative;
+}
+
+@media (max-width: 768px) {
+.cyber-form-grid { grid-template-columns: 1fr; }
+}
+
+/* --- ZONE DRAG & DROP (GLISSADE) --- */
+.cyber-dropzone {
+border: 2px dashed rgba(176, 107, 255, 0.3);
+background: #11101a;
+border-radius: 4px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 40px 20px;
+text-align: center;
+cursor: pointer;
+position: relative;
+min-height: 300px;
+overflow: hidden;
+transition: border-color 0.3s, background-color 0.3s;
+}
+.cyber-dropzone.dragover {
+border-color: var(--neon-blue);
+background: rgba(0, 240, 255, 0.05);
+}
+
+.dropzone-input { display: none; }
+
+.dropzone-infotext {
+font-family: 'Share Tech Mono', monospace;
+color: #7a7a90;
+pointer-events: none;
+}
+.dropzone-icon {
+font-size: 2.5rem;
+color: var(--neon-purple);
+margin-bottom: 15px;
+text-shadow: 0 0 10px rgba(176, 107, 255, 0.4);
+pointer-events: none;
+}
+
+/* PREVIEW IMAGE IMAGE GLISSÉE */
+.cyber-preview-container {
+position: absolute;
+top: 0; left: 0; width: 100%; height: 100%;
+background: #11101a;
+display: none;
+align-items: center;
+justify-content: center;
+}
+.cyber-preview-img {
+width: 100%; height: 100%;
+object-fit: cover;
+}
+.cyber-preview-overlay {
+position: absolute;
+bottom: 0; left: 0; width: 100%;
+background: rgba(12, 11, 20, 0.85);
+padding: 10px;
+font-family: 'Share Tech Mono', monospace;
+font-size: 12px; color: var(--neon-blue);
+text-align: center;
+border-top: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+/* --- INPUTS & CHAMPS CONTROLS --- */
+.cyber-form-group {
+display: flex;
+flex-direction: column;
+gap: 8px;
+margin-bottom: 18px;
+}
+.cyber-form-group label {
+font-family: 'Orbitron', sans-serif;
+font-size: 11px;
+letter-spacing: 1px;
+color: #a4a4ba;
+text-transform: uppercase;
+}
+.cyber-input, .cyber-textarea, .cyber-select {
+background: #141320;
+border: 1px solid rgba(255,255,255,0.08);
+border-radius: 4px;
+padding: 12px;
+color: #fff;
+font-family: 'Share Tech Mono', monospace;
+font-size: 14px;
+outline: none;
+transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cyber-input:focus, .cyber-textarea:focus, .cyber-select:focus {
+border-color: var(--neon-purple);
+box-shadow: 0 0 10px rgba(176, 107, 255, 0.2);
+}
+.cyber-textarea { resize: vertical; min-height: 80px; }
+
+.cyber-select option {
+background: #0c0b14;
+color: #fff;
+}
+
+.form-row-twin {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 15px;
+}
+
+/* BOUTON SOUMISSION CYBER */
+.cyber-submit-wrapper {
+grid-column: 1 / -1;
+margin-top: 10px;
+}
+.btn-cyber-generate {
+width: 100%;
+background: transparent;
+border: 1px solid var(--neon-green);
+color: var(--neon-green);
+padding: 16px;
+font-family: 'Orbitron', sans-serif;
+font-weight: 900;
+font-size: 1rem;
+letter-spacing: 2px;
+cursor: pointer;
+position: relative;
+box-shadow: 0 0 10px rgba(57, 255, 106, 0.1);
+transition: all 0.3s ease;
+}
+.btn-cyber-generate:hover {
+background: var(--neon-green);
+color: #080810;
+box-shadow: 0 0 30px rgba(57, 255, 106, 0.5);
+}

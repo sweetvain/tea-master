@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap');
+
+:root {
+    --neon-purple: #b06bff;
+    --neon-blue: #00f0ff;
+    --neon-green: #39ff6a;
+    --neon-red: #ff2d55;
+    --cyber-bg: rgba(8, 8, 16, 0.75);
+}
+
+/* --- HEADER PRINCIPAL --- */
+.cyber-header {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 75px;
+    background: var(--cyber-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(176, 107, 255, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), inset 0 -1px 15px rgba(176, 107, 255, 0.05);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 40px; z-index: 1000;
+    box-sizing: border-box;
+}
+
+.header-left, .header-right { display: flex; align-items: center; gap: 40px; }
+.header-left { justify-self: start; }
+.header-right { justify-self: end; }
+
+
+/* LOGO CYBER */
+.cyber-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900; font-size: 1.6rem; color: #fff;
+    text-decoration: none; letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+.neon-dot { color: var(--neon-blue); text-shadow: 0 0 12px var(--neon-blue); }
+
+/* NAVIGATION */
+.cyber-nav-links { 
+    display: flex; 
+    gap: 8px;
+    justify-self: center;
+}
+.cyber-nav-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem; color: #7a7a90; text-decoration: none;
+    padding: 8px 18px; border-radius: 4px; position: relative;
+    transition: color 0.3s ease; text-transform: uppercase;
+    border: 1px solid transparent; /* Ajout pour aligner avec le bouton admin */
+}
+.cyber-nav-link:hover, .cyber-nav-link.active { color: #fff; }
+.cyber-nav-link.active {
+    background: rgba(176, 107, 255, 0.08);
+    border: 1px solid rgba(176, 107, 255, 0.3);
+    box-shadow: 0 0 15px rgba(176, 107, 255, 0.15);
+}
+
+/* BOUTON D'INVITATION PREMIUM CHANGEANT */
+.cyber-btn-invite {
+    background: transparent;
+    border: 1px solid var(--neon-blue);
+    border-radius: 4px; padding: 10px 20px;
+    font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700;
+    color: var(--neon-blue); cursor: pointer; display: flex; align-items: center; gap: 10px;
+    position: relative; overflow: hidden; letter-spacing: 1px;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+    transition: all 0.3s ease;
+}
+.cyber-btn-invite:hover {
+    background: var(--neon-blue); color: #080810;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
+    text-shadow: none; font-weight: 900;
+}
+
+/* COMPOSANT PROFIL UTILISATEUR */
+.cyber-user-profile { display: flex; align-items: center; gap: 12px; }
+.cyber-avatar {
+    width: 38px; height: 38px; border-radius: 4px;
+    background: rgba(176, 107, 255, 0.15);
+    border: 1px solid var(--neon-purple);
+    box-shadow: 0 0 10px rgba(176, 107, 255, 0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: #fff; font-weight: 900;
+}
+.cyber-user-info { display: flex; flex-direction: column; }
+.cyber-username { font-family: 'Share Tech Mono', monospace; font-size: 14px; color: #fff; }
+.cyber-logout-btn {
+    font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--neon-red);
+    text-decoration: none; margin-top: 2px; letter-spacing: 1px; transition: opacity 0.2s;
+}
+.cyber-logout-btn:hover { opacity: 0.7; text-shadow: 0 0 5px var(--neon-red); }
+
+/* --- SYSTÈME DE NOTIFICATIONS GSAP TOASTS --- */
+#toast-container { position: fixed; top: 90px; right: 24px; display: flex; flex-direction: column; gap: 12px; z-index: 10000; pointer-events: none; }
+.toast-card {
+    pointer-events: auto; background: rgba(12, 11, 20, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 4px;
+    padding: 14px 20px; min-width: 280px; max-width: 360px;
+    display: flex; align-items: center; gap: 14px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    font-family: 'Share Tech Mono', monospace; font-size: 13px; color: #e2e2ec;
+}
+.toast-card.success { border-left: 3px solid var(--neon-green); box-shadow: 0 0 20px rgba(57, 255, 106, 0.15), 0 10px 30px rgba(0,0,0,0.5); }
+.toast-card.error { border-left: 3px solid var(--neon-red); box-shadow: 0 0 20px rgba(255, 45, 85, 0.15), 0 10px 30px rgba(0,0,0,0.5); }
+.toast-card.info { border-left: 3px solid var(--neon-purple); box-shadow: 0 0 20px rgba(176, 107, 255, 0.15), 0 10px 30px rgba(0,0,0,0.5); }
+
+/* --- MODAL DESIGN TECH --- */
+.cyber-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(4, 3, 8, 0.85); backdrop-filter: blur(8px); z-index: 9999;
+    display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.cyber-modal-overlay.open { opacity: 1; pointer-events: auto; }
+.cyber-modal-card {
+    background: #0c0b14; border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 2px;
+    width: 90%; max-width: 420px; padding: 34px; position: relative;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.7), 0 0 30px rgba(0, 240, 255, 0.1);
+    transform: translateY(-30px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cyber-modal-overlay.open .cyber-modal-card { transform: translateY(0); }
+.cyber-modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #53536a; font-size: 16px; cursor: pointer; transition: color 0.2s; }
+.cyber-modal-close:hover { color: var(--neon-red); }
+.cyber-modal-title { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.3rem; color: #fff; margin-bottom: 8px; letter-spacing: 1px; }
+.cyber-modal-subtitle { font-family: 'Share Tech Mono', monospace; color: #64647a; font-size: 13px; margin-bottom: 24px; }
+.cyber-modal-form { display: flex; flex-direction: column; gap: 14px; }
+#modal-friend-username { background: #141320; border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 14px; color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 14px; outline: none; transition: border 0.2s; }
+#modal-friend-username:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); }
+.cyber-btn-submit { background: var(--neon-blue); color: #080810; border: none; border-radius: 4px; padding: 14px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 0.85rem; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; }
+.cyber-btn-submit:hover { background: #00c2cf; box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
+
+/* --- BOUTON ADMIN FLOTTANT --- */
+.admin-float-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1001;
+    background: rgba(255, 45, 85, 0.1);
+    border: 1px solid var(--neon-red);
+    color: var(--neon-red);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 15px rgba(255, 45, 85, 0.3);
+    transition: all 0.3s ease;
+}
+.admin-float-btn:hover {
+    background: var(--neon-red);
+    color: #080810;
+    box-shadow: 0 0 30px rgba(255, 45, 85, 0.7);
+}
+.admin-icon {
+    font-size: 1rem;
+    text-shadow: 0 0 10px var(--neon-red);
+}

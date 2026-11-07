@@ -1,0 +1,99 @@
+    /* Surcharges spécifiques Admin */
+    :root { 
+        --neon-purple: #b06bff; 
+        --neon-blue: #00f0ff; 
+        --neon-red: #ff2d55; 
+        --bg-dark: #080810;
+    }
+
+    body { 
+        background: var(--bg-dark); 
+        color: #fff; 
+        font-family: 'Share Tech Mono', monospace; 
+        min-height: 100vh; 
+        overflow-y: auto; /* Fix pour le scroll */
+        padding-top: 100px;
+        padding-bottom: 50px;
+    }
+
+    .admin-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h1, h2 { 
+        font-family: 'Orbitron', sans-serif; 
+        text-transform: uppercase; 
+        letter-spacing: 2px; 
+        color: var(--neon-blue);
+        margin-bottom: 20px;
+    }
+
+    .admin-section {
+        background: rgba(12, 11, 20, 0.8);
+        border: 1px solid rgba(176, 107, 255, 0.2);
+        padding: 25px;
+        border-radius: 4px;
+        margin-bottom: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* Table Style */
+    .cyber-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    .cyber-table th {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid var(--neon-purple);
+        color: var(--neon-purple);
+        font-size: 0.9rem;
+    }
+
+    .cyber-table td {
+        padding: 12px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Boutons */
+    .btn-admin {
+        padding: 6px 12px;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.7rem;
+        cursor: pointer;
+        border: 1px solid var(--neon-blue);
+        background: transparent;
+        color: var(--neon-blue);
+        transition: 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-admin:hover {
+        background: var(--neon-blue);
+        color: #000;
+    }
+
+    .btn-del { border-color: var(--neon-red); color: var(--neon-red); }
+    .btn-del:hover { background: var(--neon-red); color: #fff; }
+
+    /* Formulaire */
+    .add-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .add-form input,
+    .add-form select {
+        background: #141320;
+        border: 1px solid #444;
+        color: #fff;
+        padding: 10px;
+        border-radius: 2px;
+    }
