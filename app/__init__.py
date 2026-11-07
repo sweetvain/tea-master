@@ -5,6 +5,7 @@ from flask import Flask, g, request, session
 
 from app.extensions import db
 from app.services.auth import get_user
+from app.services.seed import seed_if_empty
 from config import BASE_DIR, Config
 
 
@@ -41,6 +42,8 @@ def create_app(config_object=Config) -> Flask:
 
     with app.app_context():
         db.create_all()
+        if not app.testing:
+            seed_if_empty()
 
     return app
 
