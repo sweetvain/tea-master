@@ -10,7 +10,10 @@ class UploadError(ValueError):
 
 def _upload_dir() -> Path:
     folder = Path(current_app.config["UPLOAD_FOLDER"])
-    folder.mkdir(parents=True, exist_ok=True)
+    try:
+        folder.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        raise UploadError("L'envoi d'images n'est pas disponible sur cet hébergement.")
     return folder
 
 
@@ -25,7 +28,10 @@ def save_photo(file) -> str | None:
         raise UploadError(f"Format d'image non supporté (autorisés : {allowed}).")
 
     filename = f"{uuid.uuid4()}.{extension}"
-    file.save(_upload_dir() / filename)
+    try:
+        file.save(_upload_dir() / filename)
+    except OSError:
+        raise UploadError("L'envoi d'images n'est pas disponible sur cet hébergement.")
     return filename
 
 

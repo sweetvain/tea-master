@@ -15,10 +15,20 @@ def _int_env(name: str, default: int) -> int:
         return default
 
 
+def _database_url() -> str:
+    url = os.getenv("DATABASE_URL", "sqlite:///teacards.db")
+    # Heroku/Neon/Supabase fournissent parfois "postgres://", que SQLAlchemy n'accepte plus.
+    if url.startswith("postgres://"):
+        url = "postgresql://" + url[len("postgres://"):]
+    return url
+
+
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///teacards.db")
+    SQLALCHEMY_DATABASE_URI = _database_url()
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    ON_VERCEL = bool(os.getenv("VERCEL"))
 
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"

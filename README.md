@@ -37,6 +37,26 @@ pytest
 | `PROTECTED_ADMIN_USERNAME` | Admin impossible à rétrograder/supprimer | `vain` |
 | `FLASK_DEBUG` | `1` pour activer le debug en local | `0` |
 
+## Mise en ligne (Vercel)
+
+Le repo est relié à Vercel : chaque push sur `main` redéploie le site (`vercel.json` + `api/index.py`).
+
+Vercel est « serverless » : le disque est en lecture seule et ne garde rien entre deux requêtes, donc **SQLite ne peut pas y fonctionner**. Il faut une base PostgreSQL hébergée (Neon, Supabase, Vercel Postgres...).
+
+1. Crée une base PostgreSQL et copie son URL de connexion.
+2. Dans Vercel > Settings > Environment Variables, ajoute :
+   - `DATABASE_URL` : l'URL PostgreSQL
+   - `SECRET_KEY` : une longue valeur aléatoire
+3. Copie les données existantes (cartes, comptes) vers la nouvelle base, depuis ta machine :
+   ```bash
+   set DATABASE_URL=<url postgres>        # Linux/macOS : export DATABASE_URL=...
+   set SECRET_KEY=x
+   python -m scripts.migrate_sqlite instance/teacards.db
+   ```
+4. Redéploie (Deployments > Redeploy).
+
+Limites sur Vercel : les images déjà dans `static/uploads` sont servies normalement, mais **l'envoi de nouvelles images est désactivé** (disque en lecture seule). Pour l'activer, il faudra un stockage externe (Vercel Blob, Supabase Storage, S3...).
+
 ## Structure
 
 ```

@@ -22,8 +22,17 @@ def create_app(config_object=Config) -> Flask:
             raise RuntimeError("SECRET_KEY manquante : définis-la dans le fichier .env.")
         app.config["SECRET_KEY"] = secrets.token_hex(32)
 
-    Path(app.instance_path).mkdir(parents=True, exist_ok=True)
-    Path(app.config["UPLOAD_FOLDER"]).mkdir(parents=True, exist_ok=True)
+    if app.config["ON_VERCEL"] and app.config["SQLALCHEMY_DATABASE_URI"].startswith("sqlite"):
+        raise RuntimeError(
+            "DATABASE_URL manquante : le disque de Vercel est en lecture seule, "
+            "SQLite n'y fonctionne pas. Configure une base PostgreSQL."
+        )
+
+    for folder in (app.instance_path, app.config["UPLOAD_FOLDER"]):
+        try:
+            Path(folder).mkdir(parents=True, exist_ok=True)
+        except OSError:
+            pass  # disque en lecture seule (hébergement serverless)
 
     db.init_app(app)
     _register_hooks(app)
