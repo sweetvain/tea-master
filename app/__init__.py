@@ -5,7 +5,7 @@ from flask import Flask, g, request, session
 
 from app.extensions import db
 from app.services.auth import get_user
-from app.services.seed import seed_if_empty
+from app.services.seed import normalize_photo_names, seed_if_empty
 from config import BASE_DIR, Config
 
 
@@ -44,6 +44,7 @@ def create_app(config_object=Config) -> Flask:
         db.create_all()
         if not app.testing:
             seed_if_empty()
+            normalize_photo_names()
 
     return app
 

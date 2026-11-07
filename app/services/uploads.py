@@ -1,11 +1,26 @@
+import re
 import uuid
 from pathlib import Path
 
 from flask import current_app
 
 
+SAFE_NAME = re.compile(r"^[A-Za-z0-9._-]+$")
+UUID_PREFIX = re.compile(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+
+
 class UploadError(ValueError):
     """Fichier envoyé invalide (extension non autorisée, etc.)."""
+
+
+def safe_name(filename: str) -> str:
+    """Nom de fichier 100 % ASCII : les anciens noms « uuid_nom accentué.jpg » deviennent « uuid.jpg »."""
+    if SAFE_NAME.match(filename):
+        return filename
+    match = UUID_PREFIX.match(filename)
+    stem = match.group(0).lower() if match else uuid.uuid5(uuid.NAMESPACE_URL, filename).hex
+    extension = Path(filename).suffix.lower()
+    return stem + (extension if SAFE_NAME.match(extension) else "")
 
 
 def _upload_dir() -> Path:

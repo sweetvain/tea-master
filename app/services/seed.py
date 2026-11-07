@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.extensions import db
 from app.models import Card, User, user_card
+from app.services.uploads import safe_name
 
 SEED_FILE = Path(__file__).resolve().parents[2] / "data" / "seed.json"
 
@@ -32,6 +33,19 @@ def seed_if_empty() -> bool:
         "seed: %d comptes, %d cartes importés", len(data["users"]), len(data["cards"])
     )
     return True
+
+
+def normalize_photo_names() -> int:
+    """Remplace les anciens noms d'images (accents, « ? »...) par leur version ASCII."""
+    changed = 0
+    for card in Card.query.filter(Card.photo.isnot(None)).all():
+        new_name = safe_name(card.photo)
+        if new_name != card.photo:
+            card.photo = new_name
+            changed += 1
+    if changed:
+        db.session.commit()
+    return changed
 
 
 def _reset_postgres_sequence() -> None:
