@@ -41,6 +41,10 @@ class Config:
     PACKS_PER_REFRESH = 2
     CARDS_PER_PACK = 3
 
+    # Personnalisation du paquet affiché sur la page d'accueil
+    PACK_NAME = os.getenv("PACK_NAME", "TeaMasters")
+    PACK_SERIES = os.getenv("PACK_SERIES", "Série 1")
+
     PROTECTED_ADMIN_USERNAME = os.getenv("PROTECTED_ADMIN_USERNAME", "vain")
 
     MIN_USERNAME_LENGTH = 3

@@ -18,6 +18,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// Précharge la page au survol / au toucher : la navigation devient quasi instantanée.
+(function prefetchOnIntent() {
+    const seen = new Set();
+    const prefetch = event => {
+        const link = event.target.closest && event.target.closest("a[href]");
+        if (!link || link.origin !== location.origin || link.pathname === location.pathname) return;
+        if (link.pathname === "/logout" || seen.has(link.href)) return;
+        seen.add(link.href);
+        const tag = document.createElement("link");
+        tag.rel = "prefetch";
+        tag.href = link.href;
+        document.head.appendChild(tag);
+    };
+    document.addEventListener("pointerenter", prefetch, { capture: true, passive: true });
+    document.addEventListener("touchstart", prefetch, { passive: true });
+})();
+
 const TOAST_INDICATORS = { success: "✔ SUCCESS", error: "✘ ERROR", info: "✦" };
 
 function showNotification(message, type = "info") {

@@ -1,4 +1,6 @@
+import os
 import secrets
+from functools import lru_cache
 from pathlib import Path
 
 from flask import Flask, g, request, session
@@ -68,10 +70,37 @@ def _register_hooks(app: Flask) -> None:
             if g.user is None:
                 session.clear()
 
+    build_id = (os.getenv("VERCEL_GIT_COMMIT_SHA") or "")[:8]
+
+    @app.url_defaults
+    def version_static_files(endpoint, values):
+        """Ajoute ?v=<build> aux CSS/JS/images du site pour pouvoir les mettre en cache longtemps."""
+        filename = values.get("filename", "")
+        if endpoint != "static" or "v" in values or filename.startswith("uploads/"):
+            return
+        values["v"] = build_id or _file_version(app, filename)
+
+    @app.after_request
+    def cache_static_files(response):
+        if request.endpoint == "static" and response.status_code == 200:
+            if request.args.get("v"):
+                response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+            else:
+                response.headers["Cache-Control"] = "public, max-age=86400"
+        return response
+
     @app.context_processor
     def inject_user():
         user = g.get("user")
         return {"current_user": user, "is_admin": bool(user and user.is_admin)}
+
+
+@lru_cache(maxsize=512)
+def _file_version(app: Flask, filename: str) -> str:
+    try:
+        return str(int((Path(app.static_folder) / filename).stat().st_mtime))
+    except OSError:
+        return "0"
 
 
 def _register_error_handlers(app: Flask) -> None:

@@ -37,9 +37,22 @@ pytest
 | `PROTECTED_ADMIN_USERNAME` | Admin impossible à rétrograder/supprimer | `vain` |
 | `FLASK_DEBUG` | `1` pour activer le debug en local | `0` |
 
+## Personnaliser le paquet et le fond
+
+| Je veux changer | Où |
+|---|---|
+| l'illustration du paquet | remplacer `static/img/pack-art.webp` (PNG/WebP détouré, ~440 px de large) |
+| le nom / la série affichés | variables `PACK_NAME` et `PACK_SERIES` (`.env` ou Vercel) |
+| les couleurs de la feuille du paquet | `--foil`, `--accent` en haut de `static/css/pack.css` |
+| le nombre de cartes par paquet | `CARDS_PER_PACK` dans `config.py` |
+| le fond animé (lueurs, feuilles, grille) | `static/css/theme.css` + `templates/_background.html` |
+| les effets par rareté (particules, secousse) | `RARITIES` et `BURST_COUNT` dans `static/js/pack.js` |
+
+Ouverture d'un paquet : on déchire le paquet (glisser, toucher ou Entrée), puis on choisit dans quel ordre retourner les cartes (ou « Tout révéler »). Sans JavaScript, le formulaire `/pull` reste utilisable.
+
 ## Mise en ligne (Vercel)
 
-Le repo est relié à Vercel (base PostgreSQL Neon) : chaque push sur `main` redéploie le site (`vercel.json` + `api/index.py`).
+Le repo est relié à Vercel : chaque push sur `main` redéploie le site (`vercel.json` + `api/index.py`).
 
 Vercel est « serverless » : le disque est en lecture seule et ne garde rien entre deux requêtes, donc **SQLite ne peut pas y fonctionner**. Il faut une base PostgreSQL hébergée (Neon, Supabase, Vercel Postgres...).
 

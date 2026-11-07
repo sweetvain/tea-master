@@ -1,0 +1,103 @@
+/* ==========================================================================
+   THÈME GLOBAL : fond animé « nuit de thé », transitions de pages, perf
+   Tout est animé en transform/opacity uniquement (GPU, pas de reflow).
+   ========================================================================== */
+:root {
+    --tea-bg: #07060f;
+    --tea-violet: #7c3aed;
+    --tea-cyan: #00f0ff;
+    --tea-green: #39ff6a;
+}
+
+html {
+    background: var(--tea-bg);
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body { background: transparent !important; }
+
+/* --- Fond animé (derrière tout le contenu) --- */
+.bg-scene {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background: radial-gradient(120% 80% at 50% 0%, #1a1038 0%, #0b0818 55%, #05040b 100%);
+    contain: strict;
+}
+
+.bg-scene .glow {
+    position: absolute;
+    width: 60vmax;
+    height: 60vmax;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--c) 0%, transparent 65%);
+    opacity: .32;
+    will-change: transform;
+    animation: bg-drift var(--t) ease-in-out infinite alternate;
+}
+.bg-scene .g1 { --c: rgba(124, 58, 237, .9); --t: 26s; left: -15vmax; top: -22vmax; }
+.bg-scene .g2 { --c: rgba(0, 240, 255, .55); --t: 32s; right: -22vmax; top: 6vh; }
+.bg-scene .g3 { --c: rgba(57, 255, 106, .35); --t: 38s; left: 18vw; bottom: -34vmax; }
+
+@keyframes bg-drift {
+    to { transform: translate3d(8vmax, 6vmax, 0) scale(1.15); }
+}
+
+.bg-scene .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 75%);
+    mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 75%);
+}
+
+.bg-scene .leaf {
+    position: absolute;
+    top: -6vh;
+    left: var(--x);
+    width: var(--s);
+    height: calc(var(--s) * 1.7);
+    border-radius: 0 100% 0 100%;
+    background: linear-gradient(135deg, rgba(57, 255, 106, .55), rgba(0, 200, 120, .08));
+    opacity: .55;
+    will-change: transform;
+    animation: bg-fall var(--d) linear var(--delay) infinite;
+}
+
+@keyframes bg-fall {
+    from { transform: translate3d(0, -8vh, 0) rotate(0deg); }
+    to   { transform: translate3d(var(--drift), 112vh, 0) rotate(540deg); }
+}
+
+/* --- Transitions de pages fluides (navigateurs compatibles) --- */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: .18s; }
+
+.cyber-header { view-transition-name: site-header; }
+
+/* --- Performance : ne dessine que ce qui est visible --- */
+.card-item-logic {
+    content-visibility: auto;
+    contain-intrinsic-size: 266px 355px;
+}
+
+img { -webkit-user-drag: none; }
+
+/* --- Accessibilité : respecte « réduire les animations » --- */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .bg-scene .glow,
+    .bg-scene .leaf { animation: none; }
+    .bg-scene .leaf { display: none; }
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) { animation: none !important; }
+}

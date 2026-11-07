@@ -25,7 +25,7 @@ function makeModalCardEl(card) {
 
     const star = RARITY_STARS[key] ? `<div class="card-star">${RARITY_STARS[key]}</div>` : "";
     const photo = card.photo
-        ? `<img src="${window.TEA_UPLOADS_URL}${encodeURIComponent(card.photo)}" alt="${escapeHtml(card.name)}" />`
+        ? `<img src="${window.TEA_UPLOADS_URL}${encodeURIComponent(card.photo)}" alt="${escapeHtml(card.name)}" decoding="async" />`
         : `<div class="card-photo-initials">${escapeHtml(card.initials || (card.name || "?").slice(0, 2).toUpperCase())}</div>`;
 
     div.innerHTML = `

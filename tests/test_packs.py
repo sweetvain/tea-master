@@ -19,6 +19,62 @@ def test_pull_gives_new_cards_and_consumes_a_pack(app, client, make_user, make_c
         assert user.packs_left == 1
 
 
+def test_pull_without_js_renders_cards_in_pack_page(client, make_user, make_cards, login):
+    make_user()
+    make_cards(5)
+    login()
+
+    html = client.post("/pull").get_data(as_text=True)
+    assert 'id="initial-cards"' in html
+    assert 'id="pack-stage"' in html
+
+
+def test_api_pull_returns_json_cards(app, client, make_user, make_cards, login):
+    make_user()
+    make_cards(5)
+    login()
+
+    response = client.post("/api/pull")
+    data = response.get_json()
+    assert response.status_code == 200 and data["success"] is True
+    assert len(data["cards"]) == 3
+    assert data["packs_left"] == 1
+    assert data["cards"][0]["rarity"]
+
+    with app.app_context():
+        assert len(User.query.filter_by(username="alice").one().cards) == 3
+
+
+def test_api_pull_errors_are_json(client, make_user, make_cards, login):
+    make_user(packs=0)
+    make_cards(5)
+    login()
+    response = client.post("/api/pull")
+    assert response.status_code == 409
+    assert response.get_json()["code"] == "no_packs"
+
+
+def test_api_pull_all_collected(client, make_user, login):
+    make_user()
+    login()
+    response = client.post("/api/pull")
+    assert response.status_code == 409
+    assert response.get_json()["code"] == "all_collected"
+
+
+def test_api_pull_requires_login(client):
+    assert client.post("/api/pull").status_code == 401
+
+
+def test_static_files_are_versioned_and_cached(client, make_user, login):
+    make_user()
+    login()
+    html = client.get("/").get_data(as_text=True)
+    assert "css/theme.css?v=" in html
+    response = client.get("/static/css/theme.css?v=abc")
+    assert "immutable" in response.headers["Cache-Control"]
+
+
 def test_pull_never_returns_owned_cards(app, client, make_user, make_cards, login):
     make_user()
     make_cards(4)

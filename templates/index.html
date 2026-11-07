@@ -2,45 +2,95 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    {% include '_head.html' %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeaMasters - Packs</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style-pack.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-collec.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pack.css') }}">
 </head>
-<body>
+<body class="page-packs">
 
     {% with active_page='packs' %}
         {% include 'header.html' %}
     {% endwith %}
 
-    <main class="main-content">
-        <header>
-            <h1 class="page-title">Ouvrir un paquet</h1>
+    <main class="pack-page">
+        <header class="pack-header">
+            <h1 class="pack-title-page">Ouvrir un paquet</h1>
+            <p class="pack-hint" id="pack-hint">
+                {% if packs > 0 %}Glisse sur le paquet pour le déchirer (ou touche-le){% else %}Plus de paquet pour le moment{% endif %}
+            </p>
         </header>
 
         {% if message %}
-            <div class="alert-box">
-                <p class="error-message">{{ message }}</p>
-            </div>
+            <div class="alert-box"><p class="error-message">{{ message }}</p></div>
         {% endif %}
-        
-        <section class="booster-section">
-            <div class="booster-container">
-                <img src="{{ url_for('static', filename='img/test.png') }}" alt="Paquet de cartes" class="booster-pack-style">
-            </div>
-            
-            <form action="{{ url_for('main.pull') }}" method="POST">
-                <button type="submit" class="btn-primary btn-open" {% if packs == 0 %}disabled{% endif %}>
+
+        <section class="pack-stage" id="pack-stage"
+                 data-endpoint="{{ url_for('main.pull_api') }}"
+                 data-packs="{{ packs }}" data-max="{{ packs_max }}" data-cards="{{ cards_per_pack }}">
+
+            <form class="pack-form" id="pack-form" action="{{ url_for('main.pull') }}" method="POST">
+                <div class="pack-wrap{% if packs == 0 %} is-empty{% endif %}" id="pack-wrap">
+                    <div class="pack" id="pack" tabindex="0" role="button"
+                         aria-label="Ouvrir le paquet : glisse vers la droite, ou appuie sur Entrée">
+                        <div class="pack-tilt" id="pack-tilt">
+                            <div class="pack-glow"></div>
+
+                            <div class="pack-piece pack-top" id="pack-top">
+                                <span class="pack-top-text">★ {{ pack_name }} ★ BOOSTER ★</span>
+                                <span class="pack-crimp"></span>
+                            </div>
+                            <span class="pack-tear" id="pack-tear"></span>
+
+                            <div class="pack-piece pack-main" id="pack-main">
+                                <div class="pack-art">
+                                    <img src="{{ url_for('static', filename='img/pack-art.webp') }}" alt="" width="220" height="296" decoding="async">
+                                </div>
+                                <div class="pack-name">{{ pack_name }}</div>
+                                <div class="pack-meta">{{ cards_per_pack }} cartes · {{ pack_series }}</div>
+                                <div class="pack-pips" aria-hidden="true">
+                                    <i class="hess"></i><i class="rare"></i><i class="epique"></i>
+                                    <i class="legendaire"></i><i class="mythique"></i><i class="goat"></i>
+                                </div>
+                                <span class="pack-crimp bottom"></span>
+                                <span class="pack-shine"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-open" id="open-btn" {% if packs == 0 %}disabled{% endif %}>
                     {{ "Ouvrir le paquet" if packs > 0 else "Packs épuisés" }}
                 </button>
             </form>
+
+            <div class="reveal" id="reveal" hidden>
+                <div class="fan" id="fan"></div>
+                <div class="reveal-actions" id="reveal-actions">
+                    <button type="button" class="btn-ghost" id="reveal-all">Tout révéler</button>
+                </div>
+                <div class="reveal-done" id="reveal-done" hidden>
+                    <a class="btn-primary btn-link" href="{{ url_for('main.collection') }}">Voir ma collection</a>
+                    <button type="button" class="btn-ghost" id="again-btn" hidden>Ouvrir un autre paquet</button>
+                </div>
+            </div>
         </section>
-        
+
         <footer class="pack-counter">
             <p>Packs disponibles : <span id="packs-count">{{ packs }}</span> / {{ packs_max }}</p>
             <div id="timer" class="timer-text" {% if refresh_in is not none %}data-remaining="{{ refresh_in }}"{% endif %}>Chargement du temps...</div>
         </footer>
     </main>
 
-    <script src="{{ url_for('static', filename='js/pack-timer.js') }}"></script>
+    {% include 'card_modal.html' %}
+
+    {% if drawn_cards %}
+        <script id="initial-cards" type="application/json">{{ drawn_cards | tojson }}</script>
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/pack-timer.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/fx.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/pack.js') }}" defer></script>
 </body>
 </html>
