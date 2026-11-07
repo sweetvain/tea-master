@@ -39,7 +39,7 @@ pytest
 
 ## Mise en ligne (Vercel)
 
-Le repo est relié à Vercel : chaque push sur `main` redéploie le site (`vercel.json` + `api/index.py`).
+Le repo est relié à Vercel (base PostgreSQL Neon) : chaque push sur `main` redéploie le site (`vercel.json` + `api/index.py`).
 
 Vercel est « serverless » : le disque est en lecture seule et ne garde rien entre deux requêtes, donc **SQLite ne peut pas y fonctionner**. Il faut une base PostgreSQL hébergée (Neon, Supabase, Vercel Postgres...).
 
